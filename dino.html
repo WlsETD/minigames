@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
+    <section id="screen" style="width: 468px; height: 150px; background-color: lightgray; position: relative">
+      <div
+        id="dinosaur"
+        style="background-color: gray; position: absolute; bottom: 0px; left: 0; width: 44px; height: 72px"
+      ></div>
+
+      <!-- <div
+        id="cactus1"
+        style="background-color: gray; position: absolute; bottom: 0; left: 100%; width: 33px; height: 72px"
+      ></div> -->
+
+      <!-- <div
+        id="cactus2"
+        style="background-color: gray; position: absolute; bottom: 0; left: 100%; width: 66px; height: 44px"
+      ></div> -->
+    </section>
+
+    <div id="second-passed"></div>
+    <div id="output"></div>
+
+    <script>
+      var 畫面高度 = 150;
+      var 每一秒累計 = 0;
+      var 恐龍 = document.querySelector('#dinosaur');
+      var 恐龍的右側 = 44;
+      var 高瘦仙人掌的頂部 = 72;
+      var 恐龍上升中 = false;
+      var 恐龍下降中 = false;
+      var 恐龍觸頂時的底部 = 畫面高度 - 36;
+
+      setInterval(function () {
+        每一秒累計 += 0.01;
+
+        document.querySelector('#second-passed').innerText = 每一秒累計.toFixed(2);
+
+        if (每一秒累計 >= 1) {
+          var 要不要產生一個高瘦仙人掌 = Math.floor(Math.random() * 3);
+
+          if (要不要產生一個高瘦仙人掌 === 1) {
+            var 高瘦仙人掌 = document.createElement('div');
+
+            高瘦仙人掌.style.backgroundColor = 'gray';
+            高瘦仙人掌.style.position = 'absolute';
+            高瘦仙人掌.style.bottom = '0';
+            高瘦仙人掌.style.left = '468px';
+            高瘦仙人掌.style.width = '33px';
+            高瘦仙人掌.style.height = 高瘦仙人掌的頂部 + 'px';
+            高瘦仙人掌.className = 'cactus1';
+
+            document.querySelector('#screen').append(高瘦仙人掌);
+          }
+
+          每一秒累計 = 0;
+        }
+
+        var 很多的仙人掌 = document.querySelectorAll('.cactus1');
+        var 有仙人掌靠近恐龍 = false;
+
+        恐龍.innerText = 恐龍的右側;
+
+        if (恐龍上升中) {
+          var 恐龍的底部 = Number(恐龍.style.bottom.replace('px', ''));
+          var 恐龍位移後的底部 = Math.min(恐龍的底部 + 2, 恐龍觸頂時的底部);
+
+          恐龍.style.bottom = 恐龍位移後的底部 + 'px';
+
+          if (恐龍位移後的底部 === 恐龍觸頂時的底部) {
+            恐龍上升中 = false;
+            恐龍下降中 = true;
+          }
+        }
+
+        if (恐龍下降中) {
+          var 恐龍的底部 = Number(恐龍.style.bottom.replace('px', ''));
+          var 恐龍位移後的底部 = Math.max(恐龍的底部 - 4, 0);
+
+          恐龍.style.bottom = 恐龍位移後的底部 + 'px';
+
+          if (恐龍位移後的底部 === 0) {
+            恐龍下降中 = false;
+            恐龍上升中 = false;
+          }
+        }
+
+        for (var 仙人掌 of 很多的仙人掌) {
+          var 仙人掌的左側 = Number(仙人掌.style.left.replace('px', ''));
+          var 仙人掌的位移後的左側 = 仙人掌的左側 - 2;
+
+          仙人掌.innerText = 仙人掌的位移後的左側;
+
+          仙人掌.style.left = 仙人掌的位移後的左側 + 'px';
+
+          有仙人掌靠近恐龍 ||= 仙人掌的位移後的左側 < 恐龍的右側;
+
+          if (Number(仙人掌.style.left.replace('px', '')) < -Number(仙人掌.style.width.replace('px', ''))) {
+            仙人掌.remove();
+          }
+        }
+
+        var 恐龍的底部 = Number(恐龍.style.bottom.replace('px', ''));
+        var 恐龍會踩到高瘦仙人掌 = 恐龍的底部 < 高瘦仙人掌的頂部;
+
+        if (有仙人掌靠近恐龍 && 恐龍會踩到高瘦仙人掌) {
+          document.querySelector('#output').innerText = '遊戲結束';
+        }
+      }, 10);
+
+      window.onkeydown = function (e) {
+        if (e.code === 'Space' && !恐龍上升中 && !恐龍下降中) {
+          恐龍上升中 = true;
+        }
+      };
+    </script>
+  </body>
+</html>
