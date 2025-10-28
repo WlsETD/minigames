@@ -1,10 +1,246 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商業導論考題練習系統 - 隨機循環</title>
-    <h1>網站維護中</h1>
-</body>
+import React, { useState, useEffect } from 'react';
+import { RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 
-</html>
+const QuestionPractice = () => {
+  const questions = [
+    {
+      id: 1,
+      question: "關於教練領導模式，下列何者敘述錯誤？",
+      options: [
+        "(A) GROW模式的意涵為Goal, Reality, Options, Will",
+        "(B) 著重透過雙向溝通，引導學習者自我覺察與反思",
+        "(C) 教練係提供學習者最佳的問題解決方案",
+        "(D) 是一種以學習者為中心，量身打造的學習策略"
+      ],
+      answer: 2
+    },
+    {
+      id: 2,
+      question: "關於成人學習與非成人學習的比較，下列何者敘述正確？",
+      options: [
+        "(A) 教師為成人學習內容的權威",
+        "(B) 學習者的生活經驗與教材結合並非是必要的",
+        "(C) 學習者樂於主動地進入學習歷程的主體",
+        "(D) 學習者對於學習者產生學習需求的自我評估沒什麼差別"
+      ],
+      answer: 2
+    },
+    {
+      id: 3,
+      question: "培訓專業人員在說明培訓方法與工具時，下列何者敘述錯誤？",
+      options: [
+        "(A) 個案研討法係可訓練員工思考及問題解決能力",
+        "(B) 角色扮演法係在訓練中扮演一個角色，從中學習知識及技能",
+        "(C) 腦力激盪法係運用會議方式，鼓勵參與者提出創意構想",
+        "(D) 敏感度訓練法係透過互動方式，協助管理者了解下屬的心聲，建立同理心"
+      ],
+      answer: 3
+    },
+    {
+      id: 4,
+      question: "關於課程規劃內容之敘述，下列何者正確？",
+      options: [
+        "(A) 課程設計原則不包含規劃課程目的與目標",
+        "(B) 課程講師的選擇與經費預算無涉",
+        "(C) 課程形式不需考量到執行時間",
+        "(D) 擬定課程計畫表可運用5W2H為原則"
+      ],
+      answer: 3
+    },
+    {
+      id: 5,
+      question: "關於訓練評估四階段「反應層次」之運用，下列何者敘述錯誤？",
+      options: [
+        "(A) 評估學習者對整個訓練過程滿意度",
+        "(B) 作為未來改善訓練內容的參考",
+        "(C) 可透過學員意見回饋表加以調查",
+        "(D) 可評估學習者學習成效"
+      ],
+      answer: 3
+    }
+  ];
+
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [stats, setStats] = useState({ correct: 0, total: 0 });
+  const [usedQuestions, setUsedQuestions] = useState([]);
+
+  useEffect(() => {
+    loadNextQuestion();
+  }, []);
+
+  const loadNextQuestion = () => {
+    let availableQuestions = questions.filter(q => !usedQuestions.includes(q.id));
+    
+    if (availableQuestions.length === 0) {
+      setUsedQuestions([]);
+      availableQuestions = questions;
+    }
+    
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+    const nextQuestion = availableQuestions[randomIndex];
+    
+    setCurrentQuestion(nextQuestion);
+    setUsedQuestions([...usedQuestions, nextQuestion.id]);
+    setSelectedAnswer(null);
+    setShowResult(false);
+  };
+
+  const handleAnswerSelect = (index) => {
+    if (showResult) return;
+    setSelectedAnswer(index);
+  };
+
+  const handleSubmit = () => {
+    if (selectedAnswer === null) return;
+    
+    setShowResult(true);
+    const isCorrect = selectedAnswer === currentQuestion.answer;
+    setStats({
+      correct: stats.correct + (isCorrect ? 1 : 0),
+      total: stats.total + 1
+    });
+  };
+
+  const handleNext = () => {
+    loadNextQuestion();
+  };
+
+  if (!currentQuestion) return <div className="flex items-center justify-center h-screen">載入中...</div>;
+
+  const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* 統計卡片 */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">隨機題目練習</h1>
+              <p className="text-gray-600">培訓專業人員小試題</p>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-gray-600">答題統計</div>
+              <div className="text-2xl font-bold text-indigo-600">
+                {stats.correct} / {stats.total}
+              </div>
+              <div className="text-sm text-gray-500">正確率: {accuracy}%</div>
+            </div>
+          </div>
+        </div>
+
+        {/* 題目卡片 */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold">
+                題目 {currentQuestion.id}
+              </span>
+              <button
+                onClick={loadNextQuestion}
+                className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors"
+              >
+                <RefreshCw size={18} />
+                <span className="text-sm">換題目</span>
+              </button>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800 leading-relaxed">
+              {currentQuestion.question}
+            </h2>
+          </div>
+
+          {/* 選項 */}
+          <div className="space-y-3 mb-6">
+            {currentQuestion.options.map((option, index) => {
+              const isSelected = selectedAnswer === index;
+              const isCorrect = index === currentQuestion.answer;
+              const showCorrectAnswer = showResult && isCorrect;
+              const showWrongAnswer = showResult && isSelected && !isCorrect;
+
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={showResult}
+                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                    showCorrectAnswer
+                      ? 'border-green-500 bg-green-50'
+                      : showWrongAnswer
+                      ? 'border-red-500 bg-red-50'
+                      : isSelected
+                      ? 'border-indigo-500 bg-indigo-50'
+                      : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                  } ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-800">{option}</span>
+                    {showCorrectAnswer && <CheckCircle className="text-green-500" size={24} />}
+                    {showWrongAnswer && <XCircle className="text-red-500" size={24} />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 結果提示 */}
+          {showResult && (
+            <div className={`p-4 rounded-lg mb-6 ${
+              selectedAnswer === currentQuestion.answer
+                ? 'bg-green-50 border border-green-200'
+                : 'bg-red-50 border border-red-200'
+            }`}>
+              <div className="flex items-center gap-2">
+                {selectedAnswer === currentQuestion.answer ? (
+                  <>
+                    <CheckCircle className="text-green-600" size={24} />
+                    <span className="text-green-800 font-semibold">答對了！繼續加油！</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="text-red-600" size={24} />
+                    <span className="text-red-800 font-semibold">
+                      答錯了，正確答案是 {currentQuestion.options[currentQuestion.answer]}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 按鈕 */}
+          <div className="flex gap-3">
+            {!showResult ? (
+              <button
+                onClick={handleSubmit}
+                disabled={selectedAnswer === null}
+                className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+                  selectedAnswer === null
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
+                }`}
+              >
+                提交答案
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="flex-1 py-3 px-6 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
+              >
+                下一題
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 說明 */}
+        <div className="mt-6 text-center text-gray-600 text-sm">
+          <p>系統會隨機抽取題目，所有題目答完後會自動重新開始循環</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default QuestionPractice;
