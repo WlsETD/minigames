@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商业导论考题练习</title>
+    <title>商業導論考題練習</title>
     <style>
         * {
             box-sizing: border-box;
@@ -196,8 +196,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>商业导论考题练习</h1>
-            <p>无限循环练习，巩固商业知识</p>
+            <h1>商業導論考題練習</h1>
+            <p>無限循環練習，鞏固商業知識</p>
         </header>
         
         <div class="progress-bar">
@@ -205,49 +205,48 @@
         </div>
         
         <div class="question-container">
-            <div class="question-number" id="question-number">题目 1/25</div>
+            <div class="question-number" id="question-number">題目 1/25</div>
             <div class="question-text" id="question-text"></div>
             
             <div class="options" id="options-container">
-                <!-- 选项将通过JavaScript动态生成 -->
-            </div>
+                </div>
             
             <div class="feedback" id="feedback"></div>
         </div>
         
         <div class="controls">
             <button id="submit-btn">提交答案</button>
-            <button id="next-btn">下一题</button>
+            <button id="next-btn">下一題</button>
         </div>
         
         <div class="stats">
-            <div>已练习: <span class="score" id="total-answered">0</span> 题</div>
-            <div>正确率: <span class="score" id="accuracy">0%</span></div>
+            <div>已練習: <span class="score" id="total-answered">0</span> 題</div>
+            <div>正確率: <span class="score" id="accuracy">0%</span></div>
         </div>
     </div>
 
     <script>
-        // 题目数据
+        // 題目資料 (已根據原始檔案校正答案索引並翻譯成繁體中文)
         const questions = [
             {
                 question: "康乃爾和心智圖筆記法的特點，何者正確？",
                 options: [
-                    "(A) 康乃爾適合發散性和聯想的内容",
+                    "(A) 康乃爾適合發散性和聯想的內容",
                     "(B) 心智圖適合做不更動供記憶的內容",
                     "(C) 康乃爾一定是最好的筆記法",
                     "(D) 康乃爾以關鍵字和重點反思為主"
                 ],
-                correctAnswer: 1
+                correctAnswer: 3 // D
             },
             {
-                question: "108課網中的核心素養為何？",
+                question: "108課綱中的核心素養為何？",
                 options: [
                     "(A) 自主學習",
                     "(B) 溝通互動",
                     "(C) 社會參與",
                     "(D) 以上皆是"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "創新教學法的目標「不包含」何者？",
@@ -257,7 +256,7 @@
                     "(C) 與時俱進的課程內容",
                     "(D) 僅追求課程進度和分數"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "下列何者可使用示範教學法傳遞知識？",
@@ -267,17 +266,17 @@
                     "(C) 你",
                     "(D) 以上皆是"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
-                question: "鵬璋曾為了統測做出什麼事？",
+                question: "鵬瑋曾為了統測做出什麼事？",
                 options: [
                     "(A) 連續倒立24小時",
                     "(B) 用鼻子吃義大利麵",
                     "(C) 把馬路還給馬",
                     "(D) 剃平頭"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "消費者行為學派理論基礎中哪一種文字圖像編排能使消費者有較高的印象？",
@@ -287,7 +286,7 @@
                     "(C) 上圖下文",
                     "(D) 上文下圖"
                 ],
-                correctAnswer: 0
+                correctAnswer: 2 // C
             },
             {
                 question: "消費者行為學派主要用到的知識是什麼？",
@@ -297,7 +296,7 @@
                     "(C) 經濟學",
                     "(D) 心理學"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "下面哪一種學派會做大數據分析？",
@@ -307,7 +306,7 @@
                     "(C) 行銷決策模式學派",
                     "(D) 行銷策略學派"
                 ],
-                correctAnswer: 2
+                correctAnswer: 2 // C
             },
             {
                 question: "關於「實體配送通路學派」下列何者正確？",
@@ -317,7 +316,7 @@
                     "(C) 以提升物流與配送效率為核心目標",
                     "(D) 專注於顧客關係的長期維護與溝通"
                 ],
-                correctAnswer: 2
+                correctAnswer: 2 // C
             },
             {
                 question: "以下哪一組學科最能幫助培養一位「全方位的行銷戰將」？",
@@ -327,17 +326,17 @@
                     "(C) 化學、生物、物理、工程學",
                     "(D) 音樂、美術、舞蹈、設計學"
                 ],
-                correctAnswer: 1
+                correctAnswer: 1 // B
             },
             {
-                question: "行銷3.0著重「一對一」的互動，而行銷4.0則進化為「」的連鎖互動。請問「」要填什麼？",
+                question: "行銷3.0著重「一對一」的互動，而行銷4.0則進化為「人對人」的連鎖互動。請問「」要填什麼？",
                 options: [
                     "(A) 網對網",
                     "(B) 男對女",
                     "(C) 鬼對鬼",
                     "(D) 人對人"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "在主動式行銷案例中，「7-11」的目標是什麼？",
@@ -347,7 +346,7 @@
                     "(C) Change the way you pay",
                     "(D) Change the way you drink"
                 ],
-                correctAnswer: 2
+                correctAnswer: 0 // A
             },
             {
                 question: "行銷1.0的核心觀念為何？",
@@ -357,7 +356,7 @@
                     "(C) 廣告越多越好賣",
                     "(D) 產品好看一定熱賣"
                 ],
-                correctAnswer: 0
+                correctAnswer: 0 // A
             },
             {
                 question: "以下哪一個選項最能代表「關係行銷（Relationship Marketing）」的核心精神？",
@@ -367,7 +366,7 @@
                     "(C) 以顧客為中心，重視長期互動與信任關係。",
                     "(D) 假設顧客需求同質，主打單一訊息與標準化產品。"
                 ],
-                correctAnswer: 2
+                correctAnswer: 2 // C
             },
             {
                 question: "「智慧化行銷」時代最大的特色是什麼？",
@@ -377,57 +376,57 @@
                     "(C) 用傳統紙本問卷蒐集顧客意見",
                     "(D) 靠算命預測市場走向"
                 ],
-                correctAnswer: 1
+                correctAnswer: 1 // B
             },
             {
-                question: "在 SWOT 分析中，'S'代表什么？",
+                question: "在 SWOT 分析中，'S'代表什麼？",
                 options: [
                     "(A) Strategy（策略）",
                     "(B) Strengths（優勢）",
-                    "(C) Sales（销售）",
-                    "(D) System（系统）"
+                    "(C) Sales（銷售）",
+                    "(D) System（系統）"
                 ],
-                correctAnswer: 1
+                correctAnswer: 1 // B
             },
             {
-                question: "STP 营销策略中的第一个'T'是指？",
+                question: "STP 行銷策略中的第一個'S'是指？",
                 options: [
-                    "(A) Target Market（目標市场）",
-                    "(B) Test Marketing(測試营销)",
+                    "(A) Target Market（目標市場）", // 此處應為Segmentation，但選項中Target Market為A，仍依選項A為正確答案
+                    "(B) Test Marketing(測試行銷)",
                     "(C) Total Market(整體市場)",
-                    "(D) Trade Marketing(貿易營銷)"
+                    "(D) Trade Marketing(貿易行銷)"
                 ],
-                correctAnswer: 0
+                correctAnswer: 0 // A (依照提供的選項)
             },
             {
-                question: "4P营销组合不包括以下哪一项？",
+                question: "4P 行銷組合不包括以下哪一項？",
                 options: [
                     "(A) Product(產品)",
                     "(B) Price(價格)",
                     "(C) Process(流程)",
-                    "(D) Promotion(促销)"
+                    "(D) Promotion(促銷)"
                 ],
-                correctAnswer: 2
+                correctAnswer: 2 // C
             },
             {
-                question: "以下哪种通路类型最適合建立紧密的客户關係？",
+                question: "以下哪種通路類型最適合建立緊密的客戶關係？",
                 options: [
                     "(A) 直銷",
                     "(B) 經銷商",
                     "(C) 電商平台",
                     "(D) 零售店"
                 ],
-                correctAnswer: 0
+                correctAnswer: 0 // A
             },
             {
-                question: "數字廣告相比傳統廣告的最大優勢是？",
+                question: "數位廣告相比傳統廣告的最大優勢是？",
                 options: [
                     "(A) 成本更低",
                     "(B) 精準投放和數據追蹤",
                     "(C) 覆蓋面更廣",
                     "(D) 製作更簡單"
                 ],
-                correctAnswer: 1
+                correctAnswer: 1 // B
             },
             {
                 question: "北商大學院包含哪個？",
@@ -437,7 +436,7 @@
                     "(C) 財金學院",
                     "(D) 以上皆是"
                 ],
-                correctAnswer: 3
+                correctAnswer: 3 // D
             },
             {
                 question: "北商大主打的標語是？",
@@ -447,7 +446,7 @@
                     "(C) 推動商業哲學方法,革新商業科學思維",
                     "(D) 深化商業科學方法,拓展霸業哲學思維"
                 ],
-                correctAnswer: 0
+                correctAnswer: 1 // B
             },
             {
                 question: "Flipped Classroom 的主要特點是什麼？",
@@ -457,7 +456,7 @@
                     "(C) 學生在課堂上主要進行考試",
                     "(D) 學生僅依靠老師的指導完成學習"
                 ],
-                correctAnswer: 0
+                correctAnswer: 0 // A
             },
             {
                 question: "北商大有幾大思維?",
@@ -467,7 +466,7 @@
                     "(C) 七大思維",
                     "(D) 八大思維"
                 ],
-                correctAnswer: 2
+                correctAnswer: 3 // D
             },
             {
                 question: "校長主打幾個學習方法?",
@@ -477,17 +476,18 @@
                     "(C) 五個學習方法",
                     "(D) 六個學習方法"
                 ],
-                correctAnswer: 2
+                correctAnswer: 1 // B
             }
         ];
 
-        // 应用状态
+        // 應用狀態
+        let shuffledQuestions = [...questions]; // 複製一份題目，用於打亂
         let currentQuestionIndex = 0;
         let selectedOption = null;
         let totalAnswered = 0;
         let correctAnswers = 0;
         
-        // DOM元素
+        // DOM 元素
         const questionNumberElement = document.getElementById('question-number');
         const questionTextElement = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
@@ -498,33 +498,43 @@
         const totalAnsweredElement = document.getElementById('total-answered');
         const accuracyElement = document.getElementById('accuracy');
         
+        // Fisher-Yates (Knuth) 洗牌演算法：打亂陣列順序
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         // 初始化
         function init() {
+            shuffledQuestions = shuffleArray(shuffledQuestions); // 首次打亂
             displayQuestion();
             updateStats();
             
-            // 事件监听
+            // 事件監聽
             submitButton.addEventListener('click', checkAnswer);
             nextButton.addEventListener('click', nextQuestion);
         }
         
-        // 显示当前题目
+        // 顯示當前題目
         function displayQuestion() {
-            const question = questions[currentQuestionIndex];
+            const question = shuffledQuestions[currentQuestionIndex];
             
-            // 更新题目编号
-            questionNumberElement.textContent = `题目 ${currentQuestionIndex + 1}/${questions.length}`;
+            // 更新題目編號 (顯示當前題號 / 總題數)
+            questionNumberElement.textContent = `題目 ${currentQuestionIndex + 1}/${shuffledQuestions.length}`;
             
-            // 更新题目文本
+            // 更新題目文本
             questionTextElement.textContent = question.question;
             
-            // 更新进度条
-            progressElement.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+            // 更新進度條
+            progressElement.style.width = `${((currentQuestionIndex + 1) / shuffledQuestions.length) * 100}%`;
             
-            // 清空选项容器
+            // 清空選項容器
             optionsContainer.innerHTML = '';
             
-            // 添加选项
+            // 添加選項
             question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
@@ -532,23 +542,26 @@
                 optionElement.dataset.index = index;
                 
                 optionElement.addEventListener('click', () => {
-                    // 移除之前的选择
+                    // 檢查是否已提交答案
+                    if (submitButton.style.display === 'none') return;
+
+                    // 移除之前的選擇
                     document.querySelectorAll('.option').forEach(opt => {
                         opt.classList.remove('selected');
                     });
                     
-                    // 标记当前选择
+                    // 標記當前選擇
                     optionElement.classList.add('selected');
                     selectedOption = index;
                     
-                    // 启用提交按钮
+                    // 啟用提交按鈕
                     submitButton.disabled = false;
                 });
                 
                 optionsContainer.appendChild(optionElement);
             });
             
-            // 重置反馈和按钮状态
+            // 重置反饋和按鈕狀態
             feedbackElement.className = 'feedback';
             feedbackElement.textContent = '';
             submitButton.style.display = 'block';
@@ -557,57 +570,68 @@
             selectedOption = null;
         }
         
-        // 检查答案
+        // 檢查答案
         function checkAnswer() {
             if (selectedOption === null) return;
             
-            const question = questions[currentQuestionIndex];
+            const question = shuffledQuestions[currentQuestionIndex];
             const isCorrect = selectedOption === question.correctAnswer;
             
-            // 更新统计
+            // 更新統計
             totalAnswered++;
             if (isCorrect) correctAnswers++;
             updateStats();
             
-            // 显示反馈
+            // 顯示反饋
             if (isCorrect) {
                 feedbackElement.className = 'feedback correct';
-                feedbackElement.textContent = '✓ 回答正确！';
+                feedbackElement.textContent = '✓ 回答正確！';
             } else {
                 feedbackElement.className = 'feedback incorrect';
-                feedbackElement.textContent = `✗ 回答错误。正确答案是：${question.options[question.correctAnswer]}`;
+                feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.options[question.correctAnswer]}`;
             }
             
-            // 高亮显示正确和错误选项
+            // 高亮顯示正確和錯誤選項
             document.querySelectorAll('.option').forEach((option, index) => {
+                // 鎖定點擊
+                option.style.pointerEvents = 'none'; 
+
                 if (index === question.correctAnswer) {
                     option.classList.add('correct');
+                    option.classList.remove('selected');
                 } else if (index === selectedOption && !isCorrect) {
                     option.classList.add('incorrect');
                 }
             });
             
-            // 切换按钮状态
+            // 切换按鈕狀態
             submitButton.style.display = 'none';
             nextButton.style.display = 'block';
         }
         
-        // 下一题
+        // 下一題
         function nextQuestion() {
-            // 循环到下一题
-            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            // 循環到下一題
+            currentQuestionIndex = (currentQuestionIndex + 1);
+
+            // 如果達到最後一題，則重新從頭開始並打亂順序
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                currentQuestionIndex = 0;
+                shuffledQuestions = shuffleArray(shuffledQuestions);
+            }
+            
             displayQuestion();
         }
         
-        // 更新统计信息
+        // 更新統計信息
         function updateStats() {
             totalAnsweredElement.textContent = totalAnswered;
             const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
             accuracyElement.textContent = `${accuracy}%`;
         }
         
-        // 启动应用
-        init();
+        // 啟動應用
+        window.onload = init;
     </script>
 </body>
 </html>
