@@ -1,246 +1,613 @@
-import React, { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle } from 'lucide-react';
-
-const QuestionPractice = () => {
-  const questions = [
-    {
-      id: 1,
-      question: "關於教練領導模式，下列何者敘述錯誤？",
-      options: [
-        "(A) GROW模式的意涵為Goal, Reality, Options, Will",
-        "(B) 著重透過雙向溝通，引導學習者自我覺察與反思",
-        "(C) 教練係提供學習者最佳的問題解決方案",
-        "(D) 是一種以學習者為中心，量身打造的學習策略"
-      ],
-      answer: 2
-    },
-    {
-      id: 2,
-      question: "關於成人學習與非成人學習的比較，下列何者敘述正確？",
-      options: [
-        "(A) 教師為成人學習內容的權威",
-        "(B) 學習者的生活經驗與教材結合並非是必要的",
-        "(C) 學習者樂於主動地進入學習歷程的主體",
-        "(D) 學習者對於學習者產生學習需求的自我評估沒什麼差別"
-      ],
-      answer: 2
-    },
-    {
-      id: 3,
-      question: "培訓專業人員在說明培訓方法與工具時，下列何者敘述錯誤？",
-      options: [
-        "(A) 個案研討法係可訓練員工思考及問題解決能力",
-        "(B) 角色扮演法係在訓練中扮演一個角色，從中學習知識及技能",
-        "(C) 腦力激盪法係運用會議方式，鼓勵參與者提出創意構想",
-        "(D) 敏感度訓練法係透過互動方式，協助管理者了解下屬的心聲，建立同理心"
-      ],
-      answer: 3
-    },
-    {
-      id: 4,
-      question: "關於課程規劃內容之敘述，下列何者正確？",
-      options: [
-        "(A) 課程設計原則不包含規劃課程目的與目標",
-        "(B) 課程講師的選擇與經費預算無涉",
-        "(C) 課程形式不需考量到執行時間",
-        "(D) 擬定課程計畫表可運用5W2H為原則"
-      ],
-      answer: 3
-    },
-    {
-      id: 5,
-      question: "關於訓練評估四階段「反應層次」之運用，下列何者敘述錯誤？",
-      options: [
-        "(A) 評估學習者對整個訓練過程滿意度",
-        "(B) 作為未來改善訓練內容的參考",
-        "(C) 可透過學員意見回饋表加以調查",
-        "(D) 可評估學習者學習成效"
-      ],
-      answer: 3
-    }
-  ];
-
-  const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showResult, setShowResult] = useState(false);
-  const [stats, setStats] = useState({ correct: 0, total: 0 });
-  const [usedQuestions, setUsedQuestions] = useState([]);
-
-  useEffect(() => {
-    loadNextQuestion();
-  }, []);
-
-  const loadNextQuestion = () => {
-    let availableQuestions = questions.filter(q => !usedQuestions.includes(q.id));
-    
-    if (availableQuestions.length === 0) {
-      setUsedQuestions([]);
-      availableQuestions = questions;
-    }
-    
-    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-    const nextQuestion = availableQuestions[randomIndex];
-    
-    setCurrentQuestion(nextQuestion);
-    setUsedQuestions([...usedQuestions, nextQuestion.id]);
-    setSelectedAnswer(null);
-    setShowResult(false);
-  };
-
-  const handleAnswerSelect = (index) => {
-    if (showResult) return;
-    setSelectedAnswer(index);
-  };
-
-  const handleSubmit = () => {
-    if (selectedAnswer === null) return;
-    
-    setShowResult(true);
-    const isCorrect = selectedAnswer === currentQuestion.answer;
-    setStats({
-      correct: stats.correct + (isCorrect ? 1 : 0),
-      total: stats.total + 1
-    });
-  };
-
-  const handleNext = () => {
-    loadNextQuestion();
-  };
-
-  if (!currentQuestion) return <div className="flex items-center justify-center h-screen">載入中...</div>;
-
-  const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* 統計卡片 */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">隨機題目練習</h1>
-              <p className="text-gray-600">培訓專業人員小試題</p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-gray-600">答題統計</div>
-              <div className="text-2xl font-bold text-indigo-600">
-                {stats.correct} / {stats.total}
-              </div>
-              <div className="text-sm text-gray-500">正確率: {accuracy}%</div>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商业导论考题练习</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+        }
+        
+        .question-number {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            background-color: #f8f9fa;
+            border-color: #bdc3c7;
+        }
+        
+        .option.selected {
+            background-color: #e1f5fe;
+            border-color: #0288d1;
+        }
+        
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        #submit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        #submit-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        #submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        #next-btn {
+            background-color: #2ecc71;
+            color: white;
+            display: none;
+        }
+        
+        #next-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .score {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 18px;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>商业导论考题练习</h1>
+            <p>无限循环练习，巩固商业知识</p>
+        </header>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
         </div>
-
-        {/* 題目卡片 */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold">
-                題目 {currentQuestion.id}
-              </span>
-              <button
-                onClick={loadNextQuestion}
-                className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors"
-              >
-                <RefreshCw size={18} />
-                <span className="text-sm">換題目</span>
-              </button>
+        
+        <div class="question-container">
+            <div class="question-number" id="question-number">题目 1/25</div>
+            <div class="question-text" id="question-text"></div>
+            
+            <div class="options" id="options-container">
+                <!-- 选项将通过JavaScript动态生成 -->
             </div>
-            <h2 className="text-xl font-semibold text-gray-800 leading-relaxed">
-              {currentQuestion.question}
-            </h2>
-          </div>
-
-          {/* 選項 */}
-          <div className="space-y-3 mb-6">
-            {currentQuestion.options.map((option, index) => {
-              const isSelected = selectedAnswer === index;
-              const isCorrect = index === currentQuestion.answer;
-              const showCorrectAnswer = showResult && isCorrect;
-              const showWrongAnswer = showResult && isSelected && !isCorrect;
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(index)}
-                  disabled={showResult}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    showCorrectAnswer
-                      ? 'border-green-500 bg-green-50'
-                      : showWrongAnswer
-                      ? 'border-red-500 bg-red-50'
-                      : isSelected
-                      ? 'border-indigo-500 bg-indigo-50'
-                      : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
-                  } ${showResult ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-800">{option}</span>
-                    {showCorrectAnswer && <CheckCircle className="text-green-500" size={24} />}
-                    {showWrongAnswer && <XCircle className="text-red-500" size={24} />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 結果提示 */}
-          {showResult && (
-            <div className={`p-4 rounded-lg mb-6 ${
-              selectedAnswer === currentQuestion.answer
-                ? 'bg-green-50 border border-green-200'
-                : 'bg-red-50 border border-red-200'
-            }`}>
-              <div className="flex items-center gap-2">
-                {selectedAnswer === currentQuestion.answer ? (
-                  <>
-                    <CheckCircle className="text-green-600" size={24} />
-                    <span className="text-green-800 font-semibold">答對了！繼續加油！</span>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="text-red-600" size={24} />
-                    <span className="text-red-800 font-semibold">
-                      答錯了，正確答案是 {currentQuestion.options[currentQuestion.answer]}
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* 按鈕 */}
-          <div className="flex gap-3">
-            {!showResult ? (
-              <button
-                onClick={handleSubmit}
-                disabled={selectedAnswer === null}
-                className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
-                  selectedAnswer === null
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
-                }`}
-              >
-                提交答案
-              </button>
-            ) : (
-              <button
-                onClick={handleNext}
-                className="flex-1 py-3 px-6 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
-              >
-                下一題
-              </button>
-            )}
-          </div>
+            
+            <div class="feedback" id="feedback"></div>
         </div>
-
-        {/* 說明 */}
-        <div className="mt-6 text-center text-gray-600 text-sm">
-          <p>系統會隨機抽取題目，所有題目答完後會自動重新開始循環</p>
+        
+        <div class="controls">
+            <button id="submit-btn">提交答案</button>
+            <button id="next-btn">下一题</button>
         </div>
-      </div>
+        
+        <div class="stats">
+            <div>已练习: <span class="score" id="total-answered">0</span> 题</div>
+            <div>正确率: <span class="score" id="accuracy">0%</span></div>
+        </div>
     </div>
-  );
-};
 
-export default QuestionPractice;
+    <script>
+        // 题目数据
+        const questions = [
+            {
+                question: "康乃爾和心智圖筆記法的特點，何者正確？",
+                options: [
+                    "(A) 康乃爾適合發散性和聯想的内容",
+                    "(B) 心智圖適合做不更動供記憶的內容",
+                    "(C) 康乃爾一定是最好的筆記法",
+                    "(D) 康乃爾以關鍵字和重點反思為主"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "108課網中的核心素養為何？",
+                options: [
+                    "(A) 自主學習",
+                    "(B) 溝通互動",
+                    "(C) 社會參與",
+                    "(D) 以上皆是"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "創新教學法的目標「不包含」何者？",
+                options: [
+                    "(A) 老師與學生的互動",
+                    "(B) 學生真正從課程學習到的知識",
+                    "(C) 與時俱進的課程內容",
+                    "(D) 僅追求課程進度和分數"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "下列何者可使用示範教學法傳遞知識？",
+                options: [
+                    "(A) 老師",
+                    "(B) 學生",
+                    "(C) 你",
+                    "(D) 以上皆是"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "鵬璋曾為了統測做出什麼事？",
+                options: [
+                    "(A) 連續倒立24小時",
+                    "(B) 用鼻子吃義大利麵",
+                    "(C) 把馬路還給馬",
+                    "(D) 剃平頭"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "消費者行為學派理論基礎中哪一種文字圖像編排能使消費者有較高的印象？",
+                options: [
+                    "(A) 左圖右文",
+                    "(B) 置中",
+                    "(C) 上圖下文",
+                    "(D) 上文下圖"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "消費者行為學派主要用到的知識是什麼？",
+                options: [
+                    "(A) 統計學",
+                    "(B) 數學",
+                    "(C) 經濟學",
+                    "(D) 心理學"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "下面哪一種學派會做大數據分析？",
+                options: [
+                    "(A) 消費者行為學派",
+                    "(B) 實體配送學派",
+                    "(C) 行銷決策模式學派",
+                    "(D) 行銷策略學派"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "關於「實體配送通路學派」下列何者正確？",
+                options: [
+                    "(A) 強調品牌形象塑造與消費者心理影響",
+                    "(B) 注重社群經營與創意內容行銷",
+                    "(C) 以提升物流與配送效率為核心目標",
+                    "(D) 專注於顧客關係的長期維護與溝通"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "以下哪一組學科最能幫助培養一位「全方位的行銷戰將」？",
+                options: [
+                    "(A) 體育、地理、歷史、文學",
+                    "(B) 數學、心理學、統計學、經濟學",
+                    "(C) 化學、生物、物理、工程學",
+                    "(D) 音樂、美術、舞蹈、設計學"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "行銷3.0著重「一對一」的互動，而行銷4.0則進化為「」的連鎖互動。請問「」要填什麼？",
+                options: [
+                    "(A) 網對網",
+                    "(B) 男對女",
+                    "(C) 鬼對鬼",
+                    "(D) 人對人"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "在主動式行銷案例中，「7-11」的目標是什麼？",
+                options: [
+                    "(A) Change the way you shop",
+                    "(B) Change the way you eat",
+                    "(C) Change the way you pay",
+                    "(D) Change the way you drink"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "行銷1.0的核心觀念為何？",
+                options: [
+                    "(A) 老闆說什麼就是什麼",
+                    "(B) 消費者導向",
+                    "(C) 廣告越多越好賣",
+                    "(D) 產品好看一定熱賣"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "以下哪一個選項最能代表「關係行銷（Relationship Marketing）」的核心精神？",
+                options: [
+                    "(A) 銷售是行銷的終點，目標在於快速完成交易。",
+                    "(B) 以產品為中心，強調大量推廣與短期業績。",
+                    "(C) 以顧客為中心，重視長期互動與信任關係。",
+                    "(D) 假設顧客需求同質，主打單一訊息與標準化產品。"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "「智慧化行銷」時代最大的特色是什麼？",
+                options: [
+                    "(A) 用 AI 幫老闆泡咖啡",
+                    "(B) 用大數據與 AI 預測需求、精準決策",
+                    "(C) 用傳統紙本問卷蒐集顧客意見",
+                    "(D) 靠算命預測市場走向"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "在 SWOT 分析中，'S'代表什么？",
+                options: [
+                    "(A) Strategy（策略）",
+                    "(B) Strengths（優勢）",
+                    "(C) Sales（销售）",
+                    "(D) System（系统）"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "STP 营销策略中的第一个'T'是指？",
+                options: [
+                    "(A) Target Market（目標市场）",
+                    "(B) Test Marketing(測試营销)",
+                    "(C) Total Market(整體市場)",
+                    "(D) Trade Marketing(貿易營銷)"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "4P营销组合不包括以下哪一项？",
+                options: [
+                    "(A) Product(產品)",
+                    "(B) Price(價格)",
+                    "(C) Process(流程)",
+                    "(D) Promotion(促销)"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "以下哪种通路类型最適合建立紧密的客户關係？",
+                options: [
+                    "(A) 直銷",
+                    "(B) 經銷商",
+                    "(C) 電商平台",
+                    "(D) 零售店"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "數字廣告相比傳統廣告的最大優勢是？",
+                options: [
+                    "(A) 成本更低",
+                    "(B) 精準投放和數據追蹤",
+                    "(C) 覆蓋面更廣",
+                    "(D) 製作更簡單"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "北商大學院包含哪個？",
+                options: [
+                    "(A) 國際行銷",
+                    "(B) 管理學院",
+                    "(C) 財金學院",
+                    "(D) 以上皆是"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "北商大主打的標語是？",
+                options: [
+                    "(A) 引領商業哲學思維,創新商業科學方法",
+                    "(B) 引領商業科學思維,創新商業哲學方法",
+                    "(C) 推動商業哲學方法,革新商業科學思維",
+                    "(D) 深化商業科學方法,拓展霸業哲學思維"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "Flipped Classroom 的主要特點是什麼？",
+                options: [
+                    "(A) 學生的學習模式由「被動聽課」轉變為「主動學習與思考」",
+                    "(B) 老師課堂講解比以往更長, 更細",
+                    "(C) 學生在課堂上主要進行考試",
+                    "(D) 學生僅依靠老師的指導完成學習"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "北商大有幾大思維?",
+                options: [
+                    "(A) 五大思維",
+                    "(B) 六大思維",
+                    "(C) 七大思維",
+                    "(D) 八大思維"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "校長主打幾個學習方法?",
+                options: [
+                    "(A) 三個學習方法",
+                    "(B) 四個學習方法",
+                    "(C) 五個學習方法",
+                    "(D) 六個學習方法"
+                ],
+                correctAnswer: 2
+            }
+        ];
+
+        // 应用状态
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let totalAnswered = 0;
+        let correctAnswers = 0;
+        
+        // DOM元素
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackElement = document.getElementById('feedback');
+        const submitButton = document.getElementById('submit-btn');
+        const nextButton = document.getElementById('next-btn');
+        const progressElement = document.getElementById('progress');
+        const totalAnsweredElement = document.getElementById('total-answered');
+        const accuracyElement = document.getElementById('accuracy');
+        
+        // 初始化
+        function init() {
+            displayQuestion();
+            updateStats();
+            
+            // 事件监听
+            submitButton.addEventListener('click', checkAnswer);
+            nextButton.addEventListener('click', nextQuestion);
+        }
+        
+        // 显示当前题目
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // 更新题目编号
+            questionNumberElement.textContent = `题目 ${currentQuestionIndex + 1}/${questions.length}`;
+            
+            // 更新题目文本
+            questionTextElement.textContent = question.question;
+            
+            // 更新进度条
+            progressElement.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+            
+            // 清空选项容器
+            optionsContainer.innerHTML = '';
+            
+            // 添加选项
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+                
+                optionElement.addEventListener('click', () => {
+                    // 移除之前的选择
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // 标记当前选择
+                    optionElement.classList.add('selected');
+                    selectedOption = index;
+                    
+                    // 启用提交按钮
+                    submitButton.disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // 重置反馈和按钮状态
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+            submitButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            submitButton.disabled = true;
+            selectedOption = null;
+        }
+        
+        // 检查答案
+        function checkAnswer() {
+            if (selectedOption === null) return;
+            
+            const question = questions[currentQuestionIndex];
+            const isCorrect = selectedOption === question.correctAnswer;
+            
+            // 更新统计
+            totalAnswered++;
+            if (isCorrect) correctAnswers++;
+            updateStats();
+            
+            // 显示反馈
+            if (isCorrect) {
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.textContent = '✓ 回答正确！';
+            } else {
+                feedbackElement.className = 'feedback incorrect';
+                feedbackElement.textContent = `✗ 回答错误。正确答案是：${question.options[question.correctAnswer]}`;
+            }
+            
+            // 高亮显示正确和错误选项
+            document.querySelectorAll('.option').forEach((option, index) => {
+                if (index === question.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // 切换按钮状态
+            submitButton.style.display = 'none';
+            nextButton.style.display = 'block';
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            // 循环到下一题
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            displayQuestion();
+        }
+        
+        // 更新统计信息
+        function updateStats() {
+            totalAnsweredElement.textContent = totalAnswered;
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            accuracyElement.textContent = `${accuracy}%`;
+        }
+        
+        // 启动应用
+        init();
+    </script>
+</body>
+</html>
