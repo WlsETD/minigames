@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商業導論考題練習</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            background-color: #f8f9fa;
+            border-color: #bdc3c7;
+        }
+
+        .option.selected {
+            background-color: #e1f5fe;
+            border-color: #0288d1;
+        }
+
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        #submit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        #submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        #next-btn {
+            background-color: #2ecc71;
+            color: white;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>商業導論考題練習</h1>
+            <p>無限循環練習，鞏固商業知識</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question-container">
+            <div class="question-number" id="question-number">題目 1/25</div>
+            <div class="question-text" id="question-text"></div>
+
+            <div class="options" id="options-container">
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="controls">
+            <button id="submit-btn">提交答案</button>
+            <button id="next-btn">下一題</button>
+        </div>
+
+        <div class="stats">
+            <div>已練習: <span class="score" id="total-answered">0</span> 題</div>
+            <div>正確率: <span class="score" id="accuracy">0%</span></div>
+        </div>
+    </div>
+
+    <script>
+        // 題目資料 (已根據原始檔案校正答案索引並翻譯成繁體中文)
+        const questions = [
+            {
+                "question": "champion",
+                "options": [
+                    "(A) 觀眾",
+                    "(B) 競爭者",
+                    "(C) 冠軍",
+                    "(D) 裁判"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "qualify",
+                "options": [
+                    "(A) 失敗",
+                    "(B) 失去資格",
+                    "(C) 取消",
+                    "(D) 取得資格"
+                ],
+                "correctAnswer": 3
+            },
+            {
+                "question": "combination",
+                "options": [
+                    "(A) 分離",
+                    "(B) 混合，結合",
+                    "(C) 獨立",
+                    "(D) 排除"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "physical",
+                "options": [
+                    "(A) 心理的",
+                    "(B) 精神的",
+                    "(C) 身體的，物理的",
+                    "(D) 抽象的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "psychological",
+                "options": [
+                    "(A) 身體的",
+                    "(B) 哲學的",
+                    "(C) 生理的",
+                    "(D) 心理的"
+                ],
+                "correctAnswer": 3
+            },
+            {
+                "question": "factor",
+                "options": [
+                    "(A) 結果",
+                    "(B) 因素",
+                    "(C) 影響",
+                    "(D) 證據"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "elite",
+                "options": [
+                    "(A) 普通的",
+                    "(B) 劣勢的",
+                    "(C) 精英的",
+                    "(D) 次要的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "genetic",
+                "options": [
+                    "(A) 後天的",
+                    "(B) 遺傳的",
+                    "(C) 環境的",
+                    "(D) 意外的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "differentiate",
+                "options": [
+                    "(A) 連結",
+                    "(B) 統一",
+                    "(C) 使...不同",
+                    "(D) 混合"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "average",
+                "options": [
+                    "(A) 極端的",
+                    "(B) 例外的",
+                    "(C) 平均的，一般的",
+                    "(D) 最少的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "skeletal",
+                "options": [
+                    "(A) 肌肉的",
+                    "(B) 骨骼的",
+                    "(C) 精神的",
+                    "(D) 內部的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "muscle",
+                "options": [
+                    "(A) 神經",
+                    "(B) 骨頭",
+                    "(C) 肌肉",
+                    "(D) 關節"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "require",
+                "options": [
+                    "(A) 給予",
+                    "(B) 忽略",
+                    "(C) 要求，需要",
+                    "(D) 拒絕"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "generate",
+                "options": [
+                    "(A) 消耗",
+                    "(B) 摧毀",
+                    "(C) 產生，生成",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "endure",
+                "options": [
+                    "(A) 投降",
+                    "(B) 惡化",
+                    "(C) 忍受，持久",
+                    "(D) 逃避"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "pain",
+                "options": [
+                    "(A) 喜悅",
+                    "(B) 舒適",
+                    "(C) 疼痛",
+                    "(D) 和平"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "disability",
+                "options": [
+                    "(A) 能力",
+                    "(B) 潛力",
+                    "(C) 殘疾，障礙",
+                    "(D) 強項"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "substance",
+                "options": [
+                    "(A) 精神",
+                    "(B) 物質",
+                    "(C) 抽象",
+                    "(D) 理論"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "lactic",
+                "options": [
+                    "(A) 甜蜜的",
+                    "(B) 苦澀的",
+                    "(C) 乳酸的",
+                    "(D) 礦物質的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "adjust",
+                "options": [
+                    "(A) 保持不變",
+                    "(B) 改變，調整",
+                    "(C) 固定",
+                    "(D) 穩定"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "enhance",
+                "options": [
+                    "(A) 降低",
+                    "(B) 改善，提高",
+                    "(C) 削弱",
+                    "(D) 破壞"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "automatic",
+                "options": [
+                    "(A) 手動的",
+                    "(B) 人為的",
+                    "(C) 自動的",
+                    "(D) 困難的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "succeed",
+                "options": [
+                    "(A) 失敗",
+                    "(B) 獲勝",
+                    "(C) 成功",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "determination",
+                "options": [
+                    "(A) 猶豫",
+                    "(B) 懷疑",
+                    "(C) 決心",
+                    "(D) 恐懼"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "strive",
+                "options": [
+                    "(A) 休息",
+                    "(B) 放棄",
+                    "(C) 努力",
+                    "(D) 輕鬆"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "mental",
+                "options": [
+                    "(A) 身體的",
+                    "(B) 精神的，心理的",
+                    "(C) 物質的",
+                    "(D) 環境的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "height",
+                "options": [
+                    "(A) 寬度",
+                    "(B) 深度",
+                    "(C) 高度",
+                    "(D) 長度"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "suffer",
+                "options": [
+                    "(A) 享受",
+                    "(B) 經歷，遭受",
+                    "(C) 避免",
+                    "(D) 克服"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "hemoglobin",
+                "options": [
+                    "(A) 骨骼",
+                    "(B) 紅血球",
+                    "(C) 血紅蛋白",
+                    "(D) 血小板"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "culture",
+                "options": [
+                    "(A) 農業",
+                    "(B) 歷史",
+                    "(C) 文化",
+                    "(D) 藝術"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "background",
+                "options": [
+                    "(A) 前景",
+                    "(B) 結果",
+                    "(C) 背景",
+                    "(D) 表面"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "marathon",
+                "options": [
+                    "(A) 短跑",
+                    "(B) 馬拉松",
+                    "(C) 游泳",
+                    "(D) 跳遠"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "control",
+                "options": [
+                    "(A) 釋放",
+                    "(B) 失去",
+                    "(C) 控制",
+                    "(D) 允許"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "fatigue",
+                "options": [
+                    "(A) 精力",
+                    "(B) 疲勞",
+                    "(C) 活力",
+                    "(D) 健康"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "maintain",
+                "options": [
+                    "(A) 丟棄",
+                    "(B) 保持，維持",
+                    "(C) 改變",
+                    "(D) 破壞"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "technique",
+                "options": [
+                    "(A) 儀器",
+                    "(B) 感覺",
+                    "(C) 技術，技巧",
+                    "(D) 規則"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "pressure",
+                "options": [
+                    "(A) 輕鬆",
+                    "(B) 壓力",
+                    "(C) 鼓勵",
+                    "(D) 自由"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "exaggerate",
+                "options": [
+                    "(A) 低估",
+                    "(B) 誇大",
+                    "(C) 忽視",
+                    "(D) 準確"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "compliment",
+                "options": [
+                    "(A) 批評",
+                    "(B) 侮辱",
+                    "(C) 稱讚，恭維",
+                    "(D) 抱怨"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "throughout",
+                "options": [
+                    "(A) 在...之間",
+                    "(B) 在...期間，從頭到尾",
+                    "(C) 僅在...開始",
+                    "(D) 遠離"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "originate",
+                "options": [
+                    "(A) 結束",
+                    "(B) 發展",
+                    "(C) 起源於",
+                    "(D) 消失"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "established",
+                "options": [
+                    "(A) 拆除",
+                    "(B) 設立，建立",
+                    "(C) 隱藏",
+                    "(D) 破壞"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "modern",
+                "options": [
+                    "(A) 古老的",
+                    "(B) 傳統的",
+                    "(C) 現代的",
+                    "(D) 未來的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "camaraderie",
+                "options": [
+                    "(A) 敵意",
+                    "(B) 競爭",
+                    "(C) 友情，同志情誼",
+                    "(D) 孤立"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "victory",
+                "options": [
+                    "(A) 失敗",
+                    "(B) 和局",
+                    "(C) 勝利",
+                    "(D) 挑戰"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "defeat",
+                "options": [
+                    "(A) 成功",
+                    "(B) 勝利",
+                    "(C) 失敗",
+                    "(D) 挑戰"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "international",
+                "options": [
+                    "(A) 國內的",
+                    "(B) 本地的",
+                    "(C) 國際的",
+                    "(D) 區域的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "promise",
+                "options": [
+                    "(A) 威脅",
+                    "(B) 承諾，前景",
+                    "(C) 懷疑",
+                    "(D) 拒絕"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "universal",
+                "options": [
+                    "(A) 局部的",
+                    "(B) 獨特的",
+                    "(C) 普遍的，全球的",
+                    "(D) 罕見的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "appeal",
+                "options": [
+                    "(A) 缺乏興趣",
+                    "(B) 吸引力",
+                    "(C) 拒絕",
+                    "(D) 抱怨"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "unique",
+                "options": [
+                    "(A) 普通的",
+                    "(B) 普遍的",
+                    "(C) 獨特的，唯一的",
+                    "(D) 相似的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "simplicity",
+                "options": [
+                    "(A) 複雜性",
+                    "(B) 困難",
+                    "(C) 簡單性",
+                    "(D) 嚴肅性"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "stadium",
+                "options": [
+                    "(A) 教室",
+                    "(B) 體育場，體育館",
+                    "(C) 辦公室",
+                    "(D) 商店"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "recruit",
+                "options": [
+                    "(A) 解僱",
+                    "(B) 招募",
+                    "(C) 訓練",
+                    "(D) 批評"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "passion",
+                "options": [
+                    "(A) 厭惡",
+                    "(B) 無趣",
+                    "(C) 熱情",
+                    "(D) 冷漠"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "responsible",
+                "options": [
+                    "(A) 不負責任的",
+                    "(B) 自由的",
+                    "(C) 負責任的",
+                    "(D) 無辜的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "discrimination",
+                "options": [
+                    "(A) 平等",
+                    "(B) 歧視",
+                    "(C) 公正",
+                    "(D) 友善"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "immigrant",
+                "options": [
+                    "(A) 本地人",
+                    "(B) 移民，僑民",
+                    "(C) 遊客",
+                    "(D) 士兵"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "unity",
+                "options": [
+                    "(A) 分裂",
+                    "(B) 統一，團結",
+                    "(C) 爭吵",
+                    "(D) 混亂"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "colonist",
+                "options": [
+                    "(A) 原住民",
+                    "(B) 殖民者",
+                    "(C) 難民",
+                    "(D) 遊客"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "creative",
+                "options": [
+                    "(A) 破壞性的",
+                    "(B) 無趣的",
+                    "(C) 有創意的",
+                    "(D) 模仿的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "competition",
+                "options": [
+                    "(A) 合作",
+                    "(B) 競爭",
+                    "(C) 友誼",
+                    "(D) 交易"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "defeat",
+                "options": [
+                    "(A) 勝利",
+                    "(B) 鼓勵",
+                    "(C) 擊敗",
+                    "(D) 幫助"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "established",
+                "options": [
+                    "(A) 成立",
+                    "(B) 失敗",
+                    "(C) 撤銷",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 0
+            },
+            {
+                "question": "competitors",
+                "options": [
+                    "(A) 裁判",
+                    "(B) 觀眾",
+                    "(C) 競爭者",
+                    "(D) 教練"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "recruit",
+                "options": [
+                    "(A) 解散",
+                    "(B) 招募",
+                    "(C) 訓練",
+                    "(D) 退休"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "universal",
+                "options": [
+                    "(A) 區域的",
+                    "(B) 全球的",
+                    "(C) 當地的",
+                    "(D) 個人的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "unique",
+                "options": [
+                    "(A) 普通的",
+                    "(B) 獨特的",
+                    "(C) 共同的",
+                    "(D) 相似的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "unity",
+                "options": [
+                    "(A) 分散",
+                    "(B) 團結",
+                    "(C) 獨立",
+                    "(D) 區分"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "uniform",
+                "options": [
+                    "(A) 不一致的",
+                    "(B) 制服，相同的",
+                    "(C) 多變的",
+                    "(D) 混亂的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "unite",
+                "options": [
+                    "(A) 分開",
+                    "(B) 結合，團結",
+                    "(C) 破壞",
+                    "(D) 爭吵"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "universal",
+                "options": [
+                    "(A) 局部的",
+                    "(B) 普遍的",
+                    "(C) 私人的",
+                    "(D) 獨特的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "anthropology",
+                "options": [
+                    "(A) 生物學",
+                    "(B) 人類學",
+                    "(C) 地質學",
+                    "(D) 心理學"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "biology",
+                "options": [
+                    "(A) 哲學",
+                    "(B) 生物學",
+                    "(C) 歷史",
+                    "(D) 物理學"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "geology",
+                "options": [
+                    "(A) 天文學",
+                    "(B) 氣象學",
+                    "(C) 地質學",
+                    "(D) 數學"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "psychology",
+                "options": [
+                    "(A) 社會學",
+                    "(B) 心理學",
+                    "(C) 神經學",
+                    "(D) 醫學"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "swimmer",
+                "options": [
+                    "(A) 跑者",
+                    "(B) 游泳者",
+                    "(C) 騎手",
+                    "(D) 舉重者"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "completed",
+                "options": [
+                    "(A) 開始",
+                    "(B) 停止",
+                    "(C) 完成",
+                    "(D) 延遲"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "expedition",
+                "options": [
+                    "(A) 休息",
+                    "(B) 探險，遠征",
+                    "(C) 撤退",
+                    "(D) 會議"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "equipment",
+                "options": [
+                    "(A) 人員",
+                    "(B) 資金",
+                    "(C) 裝備，設備",
+                    "(D) 規則"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "slowed",
+                "options": [
+                    "(A) 加快",
+                    "(B) 減慢",
+                    "(C) 保持",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "previous",
+                "options": [
+                    "(A) 之後的",
+                    "(B) 以前的",
+                    "(C) 同時的",
+                    "(D) 現在的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "stung",
+                "options": [
+                    "(A) 安撫",
+                    "(B) 刺，蜇",
+                    "(C) 治癒",
+                    "(D) 忽略"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "jellyfish",
+                "options": [
+                    "(A) 鯨魚",
+                    "(B) 水母",
+                    "(C) 海豚",
+                    "(D) 鯊魚"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "difference",
+                "options": [
+                    "(A) 相似性",
+                    "(B) 區別",
+                    "(C) 協調",
+                    "(D) 一致"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "source",
+                "options": [
+                    "(A) 終點",
+                    "(B) 來源",
+                    "(C) 產品",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "stomach",
+                "options": [
+                    "(A) 頭部",
+                    "(B) 心臟",
+                    "(C) 胃",
+                    "(D) 腳部"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "cheer",
+                "options": [
+                    "(A) 哭泣",
+                    "(B) 歡呼",
+                    "(C) 抱怨",
+                    "(D) 批評"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "runner",
+                "options": [
+                    "(A) 游泳者",
+                    "(B) 跑者",
+                    "(C) 騎自行車者",
+                    "(D) 舉重者"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "capacity",
+                "options": [
+                    "(A) 缺乏",
+                    "(B) 能力，容量",
+                    "(C) 限制",
+                    "(D) 負擔"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "tiny",
+                "options": [
+                    "(A) 巨大的",
+                    "(B) 微小的",
+                    "(C) 普通的",
+                    "(D) 巨大的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "explosive",
+                "options": [
+                    "(A) 緩慢的",
+                    "(B) 爆炸性的，爆發的",
+                    "(C) 安靜的",
+                    "(D) 穩定的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "movement",
+                "options": [
+                    "(A) 靜止",
+                    "(B) 移動",
+                    "(C) 停止",
+                    "(D) 站立"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "altitude",
+                "options": [
+                    "(A) 深度",
+                    "(B) 緯度",
+                    "(C) 海拔，高度",
+                    "(D) 距離"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "compliment",
+                "options": [
+                    "(A) 批評",
+                    "(B) 稱讚",
+                    "(C) 侮辱",
+                    "(D) 忽視"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "blood",
+                "options": [
+                    "(A) 水",
+                    "(B) 汗水",
+                    "(C) 血液",
+                    "(D) 淚水"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "complex",
+                "options": [
+                    "(A) 簡單的",
+                    "(B) 複雜的",
+                    "(C) 容易的",
+                    "(D) 清晰的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "essential",
+                "options": [
+                    "(A) 不重要的",
+                    "(B) 次要的",
+                    "(C) 必要的",
+                    "(D) 多餘的"
+                ],
+                "correctAnswer": 2
+            },
+            {
+                "question": "hydration",
+                "options": [
+                    "(A) 乾燥",
+                    "(B) 水合作用",
+                    "(C) 飢餓",
+                    "(D) 疲勞"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "nutrition",
+                "options": [
+                    "(A) 運動",
+                    "(B) 營養",
+                    "(C) 休息",
+                    "(D) 壓力"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "overcome",
+                "options": [
+                    "(A) 投降",
+                    "(B) 克服",
+                    "(C) 失敗",
+                    "(D) 避免"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "physiologist",
+                "options": [
+                    "(A) 物理學家",
+                    "(B) 生理學家",
+                    "(C) 心理學家",
+                    "(D) 哲學家"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "strain",
+                "options": [
+                    "(A) 輕鬆",
+                    "(B) 緊張，壓力",
+                    "(C) 舒適",
+                    "(D) 休息"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "theory",
+                "options": [
+                    "(A) 實踐",
+                    "(B) 理論",
+                    "(C) 錯誤",
+                    "(D) 事實"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "ancient",
+                "options": [
+                    "(A) 現代的",
+                    "(B) 古代的",
+                    "(C) 未來的",
+                    "(D) 新興的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "originated",
+                "options": [
+                    "(A) 結束",
+                    "(B) 起源",
+                    "(C) 發展",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "federation",
+                "options": [
+                    "(A) 地方",
+                    "(B) 聯邦，聯盟",
+                    "(C) 國家",
+                    "(D) 個人"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "striker",
+                "options": [
+                    "(A) 後衛",
+                    "(B) 前鋒",
+                    "(C) 守門員",
+                    "(D) 中場"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "defeated",
+                "options": [
+                    "(A) 獲勝",
+                    "(B) 擊敗",
+                    "(C) 合作",
+                    "(D) 幫助"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "worldwide",
+                "options": [
+                    "(A) 地方的",
+                    "(B) 全世界的",
+                    "(C) 國家的",
+                    "(D) 區域的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "discipline",
+                "options": [
+                    "(A) 混亂",
+                    "(B) 紀律",
+                    "(C) 自由",
+                    "(D) 寬容"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "discrimination",
+                "options": [
+                    "(A) 平等",
+                    "(B) 歧視",
+                    "(C) 尊重",
+                    "(D) 公正"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "symbol",
+                "options": [
+                    "(A) 現實",
+                    "(B) 符號，象徵",
+                    "(C) 具體",
+                    "(D) 物品"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "tribal",
+                "options": [
+                    "(A) 現代的",
+                    "(B) 部落的",
+                    "(C) 城市的",
+                    "(D) 國家的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "involvement",
+                "options": [
+                    "(A) 排除",
+                    "(B) 參與，涉入",
+                    "(C) 忽視",
+                    "(D) 隔離"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "solve",
+                "options": [
+                    "(A) 創造",
+                    "(B) 解決",
+                    "(C) 隱藏",
+                    "(D) 複雜化"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "community",
+                "options": [
+                    "(A) 個人",
+                    "(B) 社區",
+                    "(C) 敵人",
+                    "(D) 陌生人"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "talent",
+                "options": [
+                    "(A) 弱點",
+                    "(B) 才能，天賦",
+                    "(C) 缺點",
+                    "(D) 限制"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "dream",
+                "options": [
+                    "(A) 現實",
+                    "(B) 夢想",
+                    "(C) 事實",
+                    "(D) 邏輯"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "professional",
+                "options": [
+                    "(A) 業餘的",
+                    "(B) 專業的",
+                    "(C) 隨意的",
+                    "(D) 新手的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "millions",
+                "options": [
+                    "(A) 數十個",
+                    "(B) 數百萬",
+                    "(C) 數千個",
+                    "(D) 數十億"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "historian",
+                "options": [
+                    "(A) 科學家",
+                    "(B) 歷史學家",
+                    "(C) 作家",
+                    "(D) 政治家"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "ball",
+                "options": [
+                    "(A) 球拍",
+                    "(B) 球",
+                    "(C) 棒子",
+                    "(D) 網子"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "cloth",
+                "options": [
+                    "(A) 金屬",
+                    "(B) 布料",
+                    "(C) 木頭",
+                    "(D) 塑料"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "bright",
+                "options": [
+                    "(A) 黑暗的",
+                    "(B) 明亮的",
+                    "(C) 黯淡的",
+                    "(D) 陰沉的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "rural",
+                "options": [
+                    "(A) 城市的",
+                    "(B) 農村的",
+                    "(C) 國際的",
+                    "(D) 專業的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "hand-made",
+                "options": [
+                    "(A) 機製的",
+                    "(B) 手工製作的",
+                    "(C) 自動的",
+                    "(D) 複雜的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "friendship",
+                "options": [
+                    "(A) 競爭",
+                    "(B) 友誼",
+                    "(C) 敵意",
+                    "(D) 孤立"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "share",
+                "options": [
+                    "(A) 隱藏",
+                    "(B) 分享",
+                    "(C) 獨佔",
+                    "(D) 拒絕"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "excitement",
+                "options": [
+                    "(A) 平靜",
+                    "(B) 興奮",
+                    "(C) 無聊",
+                    "(D) 憂鬱"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "continent",
+                "options": [
+                    "(A) 島嶼",
+                    "(B) 大陸",
+                    "(C) 海洋",
+                    "(D) 國家"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "conflict",
+                "options": [
+                    "(A) 和平",
+                    "(B) 衝突",
+                    "(C) 協議",
+                    "(D) 合作"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "heritage",
+                "options": [
+                    "(A) 財富",
+                    "(B) 遺產",
+                    "(C) 建築",
+                    "(D) 衣服"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "development",
+                "options": [
+                    "(A) 衰退",
+                    "(B) 發展",
+                    "(C) 停止",
+                    "(D) 破壞"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "economic",
+                "options": [
+                    "(A) 社會的",
+                    "(B) 經濟的",
+                    "(C) 政治的",
+                    "(D) 文化的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "political",
+                "options": [
+                    "(A) 經濟的",
+                    "(B) 政治的",
+                    "(C) 社會的",
+                    "(D) 文化的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "religious",
+                "options": [
+                    "(A) 科學的",
+                    "(B) 宗教的",
+                    "(C) 歷史的",
+                    "(D) 哲學的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "symbol",
+                "options": [
+                    "(A) 具體物",
+                    "(B) 象徵",
+                    "(C) 物品",
+                    "(D) 事實"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "promote",
+                "options": [
+                    "(A) 抑制",
+                    "(B) 促進",
+                    "(C) 停止",
+                    "(D) 忽略"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "peace",
+                "options": [
+                    "(A) 戰爭",
+                    "(B) 和平",
+                    "(C) 衝突",
+                    "(D) 爭吵"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "frequent",
+                "options": [
+                    "(A) 罕見的",
+                    "(B) 頻繁的",
+                    "(C) 唯一的",
+                    "(D) 緩慢的"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "doubt",
+                "options": [
+                    "(A) 確信",
+                    "(B) 懷疑",
+                    "(C) 相信",
+                    "(D) 知道"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "trouble",
+                "options": [
+                    "(A) 幫助",
+                    "(B) 麻煩",
+                    "(C) 舒適",
+                    "(D) 快樂"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "explore",
+                "options": [
+                    "(A) 忽略",
+                    "(B) 探索",
+                    "(C) 隱藏",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "connect",
+                "options": [
+                    "(A) 分離",
+                    "(B) 連結",
+                    "(C) 忽略",
+                    "(D) 停止"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "referee",
+                "options": [
+                    "(A) 觀眾",
+                    "(B) 裁判",
+                    "(C) 球員",
+                    "(D) 教練"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                "question": "penalty",
+                "options": [
+                    "(A) 獎勵",
+                    "(B) 懲罰",
+                    "(C) 鼓勵",
+                    "(D) 幫助"
+                ],
+                "correctAnswer": 1
+            },
+            {
+                question: "subjective",
+                options: [
+                    "(A) 客觀的",
+                    "(B) 主觀的",
+                    "(C) 精確的",
+                    "(D) 永恆的"
+                ],
+                correctAnswer: 1 // B
+            },
+            {
+                question: "varies",
+                options: [
+                    "(A) 改變；不同",
+                    "(B) 重複",
+                    "(C) 減少",
+                    "(D) 固定"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "biologist",
+                options: [
+                    "(A) 生物學家",
+                    "(B) 心理學家",
+                    "(C) 地理學家",
+                    "(D) 化學家"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "anthropologist",
+                options: [
+                    "(A) 醫生",
+                    "(B) 人類學家",
+                    "(C) 哲學家",
+                    "(D) 科學家"
+                ],
+                correctAnswer: 1 // B
+            },
+            {
+                question: "characteristic",
+                options: [
+                    "(A) 特徵",
+                    "(B) 缺點",
+                    "(C) 優勢",
+                    "(D) 錯誤"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "define",
+                options: [
+                    "(A) 決定",
+                    "(B) 定義",
+                    "(C) 測量",
+                    "(D) 分析"
+                ],
+                correctAnswer: 1 // B
+            },
+            {
+                question: "physical",
+                options: [
+                    "(A) 身體的",
+                    "(B) 精神的",
+                    "(C) 想像的",
+                    "(D) 抽象的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "appearance",
+                options: [
+                    "(A) 外表",
+                    "(B) 感覺",
+                    "(C) 意見",
+                    "(D) 聲音"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "ideal",
+                options: [
+                    "(A) 完美的",
+                    "(B) 普通的",
+                    "(C) 暫時的",
+                    "(D) 不現實的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "culture",
+                options: [
+                    "(A) 文化",
+                    "(B) 氣候",
+                    "(C) 食物",
+                    "(D) 建築"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "attractiveness",
+                options: [
+                    "(A) 吸引力",
+                    "(B) 危險性",
+                    "(C) 難度",
+                    "(D) 費用"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "preference",
+                options: [
+                    "(A) 偏好",
+                    "(B) 傳統",
+                    "(C) 命令",
+                    "(D) 限制"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "society",
+                options: [
+                    "(A) 社會",
+                    "(B) 公司",
+                    "(C) 政府",
+                    "(D) 家庭"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "influence",
+                options: [
+                    "(A) 影響",
+                    "(B) 控制",
+                    "(C) 測試",
+                    "(D) 移動"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "region",
+                options: [
+                    "(A) 地區",
+                    "(B) 宗教",
+                    "(C) 原因",
+                    "(D) 理論"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "measure",
+                options: [
+                    "(A) 測量",
+                    "(B) 解釋",
+                    "(C) 發展",
+                    "(D) 想像"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "standard",
+                options: [
+                    "(A) 標準",
+                    "(B) 價格",
+                    "(C) 比例",
+                    "(D) 模型"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "confident",
+                options: [
+                    "(A) 自信的",
+                    "(B) 害羞的",
+                    "(C) 緊張的",
+                    "(D) 冷靜的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "feature",
+                options: [
+                    "(A) 特徵",
+                    "(B) 缺點",
+                    "(C) 條件",
+                    "(D) 結果"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "concept",
+                options: [
+                    "(A) 概念",
+                    "(B) 工具",
+                    "(C) 模型",
+                    "(D) 事件"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "associate",
+                options: [
+                    "(A) 聯想",
+                    "(B) 拒絕",
+                    "(C) 分離",
+                    "(D) 測試"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "generation",
+                options: [
+                    "(A) 世代",
+                    "(B) 國家",
+                    "(C) 性別",
+                    "(D) 宗教"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "experiment",
+                options: [
+                    "(A) 實驗",
+                    "(B) 經驗",
+                    "(C) 解釋",
+                    "(D) 表演"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "respond",
+                options: [
+                    "(A) 回應",
+                    "(B) 忽略",
+                    "(C) 停止",
+                    "(D) 拒絕"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "environment",
+                options: [
+                    "(A) 環境",
+                    "(B) 傳統",
+                    "(C) 計畫",
+                    "(D) 技術"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "population",
+                options: [
+                    "(A) 人口",
+                    "(B) 政府",
+                    "(C) 機構",
+                    "(D) 自然"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "tradition",
+                options: [
+                    "(A) 傳統",
+                    "(B) 趨勢",
+                    "(C) 技術",
+                    "(D) 體系"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "media",
+                options: [
+                    "(A) 媒體",
+                    "(B) 藥物",
+                    "(C) 音樂",
+                    "(D) 社群"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "global",
+                options: [
+                    "(A) 全球的",
+                    "(B) 區域的",
+                    "(C) 個別的",
+                    "(D) 偶然的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "universal",
+                options: [
+                    "(A) 普遍的",
+                    "(B) 罕見的",
+                    "(C) 特別的",
+                    "(D) 專屬的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "unique",
+                options: [
+                    "(A) 獨特的",
+                    "(B) 相似的",
+                    "(C) 平常的",
+                    "(D) 複雜的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "internal",
+                options: [
+                    "(A) 內在的",
+                    "(B) 外在的",
+                    "(C) 可見的",
+                    "(D) 短暫的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "external",
+                options: [
+                    "(A) 外部的",
+                    "(B) 內部的",
+                    "(C) 永久的",
+                    "(D) 快速的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "evidence",
+                options: [
+                    "(A) 證據",
+                    "(B) 故事",
+                    "(C) 意見",
+                    "(D) 形象"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "research",
+                options: [
+                    "(A) 研究",
+                    "(B) 課程",
+                    "(C) 活動",
+                    "(D) 結果"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "scientific",
+                options: [
+                    "(A) 科學的",
+                    "(B) 社會的",
+                    "(C) 政治的",
+                    "(D) 藝術的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "emotion",
+                options: [
+                    "(A) 情感",
+                    "(B) 動作",
+                    "(C) 思考",
+                    "(D) 計畫"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "create",
+                options: [
+                    "(A) 創造",
+                    "(B) 破壞",
+                    "(C) 改變",
+                    "(D) 修理"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "represent",
+                options: [
+                    "(A) 代表",
+                    "(B) 解釋",
+                    "(C) 測試",
+                    "(D) 消失"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "appreciate",
+                options: [
+                    "(A) 欣賞",
+                    "(B) 忽略",
+                    "(C) 嘲笑",
+                    "(D) 拒絕"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "emphasize",
+                options: [
+                    "(A) 強調",
+                    "(B) 隱藏",
+                    "(C) 改變",
+                    "(D) 分析"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "idealize",
+                options: [
+                    "(A) 理想化",
+                    "(B) 簡化",
+                    "(C) 忽略",
+                    "(D) 抹去"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "respondent",
+                options: [
+                    "(A) 回答者",
+                    "(B) 研究員",
+                    "(C) 教授",
+                    "(D) 學生"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "attractive",
+                options: [
+                    "(A) 有吸引力的",
+                    "(B) 令人害怕的",
+                    "(C) 平凡的",
+                    "(D) 無趣的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "fashion",
+                options: [
+                    "(A) 時尚",
+                    "(B) 文化",
+                    "(C) 建築",
+                    "(D) 食物"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "advertising",
+                options: [
+                    "(A) 廣告",
+                    "(B) 報告",
+                    "(C) 會議",
+                    "(D) 政策"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "select",
+                options: [
+                    "(A) 選擇",
+                    "(B) 拒絕",
+                    "(C) 創造",
+                    "(D) 改變"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "desire",
+                options: [
+                    "(A) 渴望",
+                    "(B) 恐懼",
+                    "(C) 厭惡",
+                    "(D) 懷疑"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "model",
+                options: [
+                    "(A) 模特兒",
+                    "(B) 機器",
+                    "(C) 計畫",
+                    "(D) 工具"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "publication",
+                options: [
+                    "(A) 刊物",
+                    "(B) 產品",
+                    "(C) 服裝",
+                    "(D) 學校"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "artist",
+                options: [
+                    "(A) 藝術家",
+                    "(B) 科學家",
+                    "(C) 醫生",
+                    "(D) 學者"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "illustrate",
+                options: [
+                    "(A) 說明；插圖",
+                    "(B) 拒絕",
+                    "(C) 測量",
+                    "(D) 改變"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "symbol",
+                options: [
+                    "(A) 象徵",
+                    "(B) 標題",
+                    "(C) 節日",
+                    "(D) 顏色"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "value",
+                options: [
+                    "(A) 價值",
+                    "(B) 顏色",
+                    "(C) 動作",
+                    "(D) 結構"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "region",
+                options: [
+                    "(A) 地區",
+                    "(B) 感情",
+                    "(C) 材料",
+                    "(D) 性格"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "individual",
+                options: [
+                    "(A) 個人的",
+                    "(B) 共同的",
+                    "(C) 普遍的",
+                    "(D) 外來的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "surrounding",
+                options: [
+                    "(A) 周圍的",
+                    "(B) 遠離的",
+                    "(C) 外國的",
+                    "(D) 快速的"
+                ],
+                correctAnswer: 0 // A
+            },
+            {
+                question: "achievement",
+                options: [
+                    "(A) 成就",
+                    "(B) 事件",
+                    "(C) 習慣",
+                    "(D) 障礙"
+                ],
+                correctAnswer: 0 // A
+            },
+    
+        ];
+
+        // 應用狀態
+        let shuffledQuestions = [...questions]; // 複製一份題目，用於打亂
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let totalAnswered = 0;
+        let correctAnswers = 0;
+
+        // DOM 元素
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackElement = document.getElementById('feedback');
+        const submitButton = document.getElementById('submit-btn');
+        const nextButton = document.getElementById('next-btn');
+        const progressElement = document.getElementById('progress');
+        const totalAnsweredElement = document.getElementById('total-answered');
+        const accuracyElement = document.getElementById('accuracy');
+
+        // Fisher-Yates (Knuth) 洗牌演算法：打亂陣列順序
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 初始化
+        function init() {
+            shuffledQuestions = shuffleArray(shuffledQuestions); // 首次打亂
+            displayQuestion();
+            updateStats();
+
+            // 事件監聽
+            submitButton.addEventListener('click', checkAnswer);
+            nextButton.addEventListener('click', nextQuestion);
+        }
+
+        // 顯示當前題目
+        function displayQuestion() {
+            const question = shuffledQuestions[currentQuestionIndex];
+
+            // 更新題目編號 (顯示當前題號 / 總題數)
+            questionNumberElement.textContent = `題目 ${currentQuestionIndex + 1}/${shuffledQuestions.length}`;
+
+            // 更新題目文本
+            questionTextElement.textContent = question.question;
+
+            // 更新進度條
+            progressElement.style.width = `${((currentQuestionIndex + 1) / shuffledQuestions.length) * 100}%`;
+
+            // 清空選項容器
+            optionsContainer.innerHTML = '';
+
+            // 添加選項
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+
+                optionElement.addEventListener('click', () => {
+                    // 檢查是否已提交答案
+                    if (submitButton.style.display === 'none') return;
+
+                    // 移除之前的選擇
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+
+                    // 標記當前選擇
+                    optionElement.classList.add('selected');
+                    selectedOption = index;
+
+                    // 啟用提交按鈕
+                    submitButton.disabled = false;
+                });
+
+                optionsContainer.appendChild(optionElement);
+            });
+
+            // 重置反饋和按鈕狀態
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+            submitButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            submitButton.disabled = true;
+            selectedOption = null;
+        }
+
+        // 檢查答案
+        function checkAnswer() {
+            if (selectedOption === null) return;
+
+            const question = shuffledQuestions[currentQuestionIndex];
+            const isCorrect = selectedOption === question.correctAnswer;
+
+            // 更新統計
+            totalAnswered++;
+            if (isCorrect) correctAnswers++;
+            updateStats();
+
+            // 顯示反饋
+            if (isCorrect) {
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.textContent = '✓ 回答正確！';
+            } else {
+                feedbackElement.className = 'feedback incorrect';
+                feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.options[question.correctAnswer]}`;
+            }
+
+            // 高亮顯示正確和錯誤選項
+            document.querySelectorAll('.option').forEach((option, index) => {
+                // 鎖定點擊
+                option.style.pointerEvents = 'none';
+
+                if (index === question.correctAnswer) {
+                    option.classList.add('correct');
+                    option.classList.remove('selected');
+                } else if (index === selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // 切换按鈕狀態
+            submitButton.style.display = 'none';
+            nextButton.style.display = 'block';
+        }
+
+        // 下一題
+        function nextQuestion() {
+            // 循環到下一題
+            currentQuestionIndex = (currentQuestionIndex + 1);
+
+            // 如果達到最後一題，則重新從頭開始並打亂順序
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                currentQuestionIndex = 0;
+                shuffledQuestions = shuffleArray(shuffledQuestions);
+            }
+
+            displayQuestion();
+        }
+
+        // 更新統計信息
+        function updateStats() {
+            totalAnsweredElement.textContent = totalAnswered;
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            accuracyElement.textContent = `${accuracy}%`;
+        }
+
+        // 啟動應用
+        window.onload = init;
+    </script>
+</body>
+
+</html>
