@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商業導論考題練習</title>
+    <title>經濟學考題練習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -19,6 +20,8 @@
             line-height: 1.6;
             padding: 20px;
             transition: background-color 0.3s ease, color 0.3s ease;
+            padding: 0;
+
         }
 
         body.dark-mode {
@@ -433,10 +436,57 @@
                 font-size: 20px;
             }
         }
+        @keyframes start{
+            0%{
+                scale: 1;
+            }
+            100%{
+                scale: 5;
+                opacity: 0;
+                display: none;
+            }
+        }
+        @keyframes ii{
+            0%{
+                opacity: 0;
+                transform: translateY(250%);
+                filter: blur(5px);
+                scale: 0;
+            }
+            100%{
+                opacity: 1;
+                transform: translateY(0%);
+                filter: blur(0%);
+                scale: 1;
+            }
+        }
+        .start{
+            color: white;
+            background-color: #16213e;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            animation: start 0.5s ease-in-out forwards;
+            animation-delay: 2.5s;
+            font-size: 7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 10000;
+        }
+        i.fa-book{
+             animation: ii 1s ease-out forwards;
+        }
     </style>
 </head>
-
+ <div class="start">
+        <i class="fa-solid fa-book"></i>
+    </div>
 <body>
+   
     <div class="container">
         <header>
             <button class="theme-toggle" id="theme-toggle" aria-label="切換主題">🌙</button>
