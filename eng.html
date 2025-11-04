@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英文</title>
+    <title>英文填充題</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -17,7 +18,7 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            padding: 0px;
+            padding: 0;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -334,6 +335,7 @@
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
+            gap: 10px; /* 新增：按鈕間距 */
         }
 
         button {
@@ -345,7 +347,8 @@
             font-weight: bold;
             transition: all 0.2s ease;
         }
-
+        
+        /* 提交按鈕 */
         #submit-btn {
             background-color: #3498db;
             color: white;
@@ -373,7 +376,8 @@
             background-color: #2d3561;
             color: #666;
         }
-
+        
+        /* 下一題按鈕 */
         #next-btn {
             background-color: #2ecc71;
             color: white;
@@ -390,6 +394,26 @@
 
         body.dark-mode #next-btn:hover {
             background-color: #388e3c;
+        }
+
+        /* 下載錯題本按鈕 (新增) */
+        #download-errors-btn {
+            background-color: #f39c12; /* 顯眼的橘色 */
+            color: white;
+            display: none; /* 預設隱藏 */
+        }
+
+        #download-errors-btn:hover {
+            background-color: #e67e22;
+        }
+
+        body.dark-mode #download-errors-btn {
+            background-color: #ff9800;
+            color: #1a1a2e;
+        }
+
+        body.dark-mode #download-errors-btn:hover {
+            background-color: #fb8c00;
         }
 
         .stats {
@@ -425,15 +449,18 @@
             }
 
             button {
-                padding: 10px 20px;
+                padding: 10px 15px;
                 font-size: 14px;
             }
 
             .theme-toggle {
                 font-size: 20px;
             }
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
-
 
         @keyframes start {
             0% {
@@ -465,7 +492,7 @@
 
         .start {
             color: white;
-            background-color: #4f2e2e;
+            background-color: #16213e;
             width: 100%;
             margin: 0;
             padding: 0;
@@ -481,13 +508,10 @@
             z-index: 10000;
         }
 
-        i.fa-a {
+        i.fa-book {
             animation: ii 1s ease-out forwards;
         }
 
-        i.fa-house {
-            color: #7d7d7d;
-        }
         .home-btn {
             top: 0;
             left: 0;
@@ -500,24 +524,26 @@
             justify-content: center;
             font-size: 20px;
             transition: 0.3s;
+            color: #7d7d7d;
         }
-        .home-btn:hover{
+
+        .home-btn:hover {
             box-shadow: 0 0 10px white;
             scale: 1.3;
             border: 0;
         }
     </style>
 </head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 <div class="start">
-    <i class="fa-solid fa-a"></i>
+    <i class="fa-solid fa-book"></i>
 </div>
 
 <body>
+
     <div class="container">
         <header>
-            <a href="https://wlsetd.github.io/minigames/menu" class="home-btn"><i class="fa-solid fa-house"></i></a>
             <button class="theme-toggle" id="theme-toggle" aria-label="切換主題">🌙</button>
+            <a href="https://wlsetd.github.io/minigames/menu" class="home-btn"><i class="fa-solid fa-house"></i></a>
             <h1>英文</h1>
             <p>無限循環練習，鞏固英文知識</p>
         </header>
@@ -527,7 +553,7 @@
         </div>
 
         <div class="question-container">
-            <div class="question-number" id="question-number">題目 1/7</div>
+            <div class="question-number" id="question-number"></div>
             <div class="question-text" id="question-text"></div>
 
             <div class="options" id="options-container"></div>
@@ -538,6 +564,7 @@
         <div class="controls">
             <button id="submit-btn">提交答案</button>
             <button id="next-btn">下一題</button>
+            <button id="download-errors-btn">下載錯題本</button>
         </div>
 
         <div class="stats">
@@ -2137,6 +2164,9 @@
         let fillInAnswer = "";
         let totalAnswered = 0;
         let correctAnswers = 0;
+        
+        // ⭐ 新增：用於儲存所有答錯題目的陣列（儲存原始題目物件）
+        let incorrectQuestions = []; 
 
         const questionNumberElement = document.getElementById('question-number');
         const questionTextElement = document.getElementById('question-text');
@@ -2148,6 +2178,8 @@
         const totalAnsweredElement = document.getElementById('total-answered');
         const accuracyElement = document.getElementById('accuracy');
         const themeToggle = document.getElementById('theme-toggle');
+        // ⭐ 新增：下載按鈕元素
+        const downloadErrorsButton = document.getElementById('download-errors-btn'); 
 
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
@@ -2220,6 +2252,8 @@
             themeToggle.addEventListener('click', toggleTheme);
             submitButton.addEventListener('click', checkAnswer);
             nextButton.addEventListener('click', nextQuestion);
+            // ⭐ 新增：為下載按鈕添加事件監聽器
+            downloadErrorsButton.addEventListener('click', downloadIncorrectQuestions); 
         }
 
         function displayQuestion() {
@@ -2317,6 +2351,8 @@
             feedbackElement.textContent = '';
             submitButton.style.display = 'block';
             nextButton.style.display = 'none';
+            // 每次載入新題時，如果沒有錯誤題目，下載按鈕應隱藏 (已在 updateStats 處理)
+            downloadErrorsButton.style.display = incorrectQuestions.length > 0 ? 'block' : 'none'; 
             submitButton.disabled = true;
             selectedOption = null;
             fillInAnswer = "";
@@ -2325,25 +2361,39 @@
         function checkAnswer() {
             const question = shuffledQuestions[currentQuestionIndex];
             let isCorrect = false;
+            let currentCorrectAnswerDisplay = ""; // 用於顯示在 feedback 裡
 
             if (question.type === "multiple-choice") {
                 if (selectedOption === null) return;
                 isCorrect = selectedOption === question.correctAnswer;
+                currentCorrectAnswerDisplay = question.options[question.correctAnswer];
             } else if (question.type === "multi-select") {
                 if (selectedOptions.size === 0) return;
                 const correctSet = new Set(question.correctAnswer);
                 isCorrect = selectedOptions.size === correctSet.size &&
                     [...selectedOptions].every(idx => correctSet.has(idx));
+                currentCorrectAnswerDisplay = question.correctAnswer.map(idx => question.options[idx]).join('、');
             } else {
                 if (fillInAnswer.length === 0) return;
                 const normalizedAnswer = fillInAnswer.toLowerCase().replace(/\s+/g, '');
                 isCorrect = question.acceptableAnswers.some(answer =>
                     answer.toLowerCase().replace(/\s+/g, '') === normalizedAnswer
                 );
+                // 填充題的正確答案顯示為原始的 correctAnswer 欄位
+                const originalQuestion = questions.find(q => q.question === question.question);
+                currentCorrectAnswerDisplay = originalQuestion.correctAnswer;
             }
 
             totalAnswered++;
-            if (isCorrect) correctAnswers++;
+            if (isCorrect) {
+                correctAnswers++;
+            } else {
+                // ⭐ 新增：如果回答錯誤，將**原始**題目加入錯誤題本
+                const originalQuestion = questions.find(q => q.question === question.question); 
+                if (originalQuestion && !incorrectQuestions.some(q => q.question === originalQuestion.question)) {
+                    incorrectQuestions.push(originalQuestion);
+                }
+            }
             updateStats();
 
             if (isCorrect) {
@@ -2351,16 +2401,10 @@
                 feedbackElement.textContent = '✓ 回答正確！';
             } else {
                 feedbackElement.className = 'feedback incorrect';
-                if (question.type === "multiple-choice") {
-                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.options[question.correctAnswer]}`;
-                } else if (question.type === "multi-select") {
-                    const correctAnswers = question.correctAnswer.map(idx => question.options[idx]).join('、');
-                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${correctAnswers}`;
-                } else {
-                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.correctAnswer}`;
-                }
+                feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${currentCorrectAnswerDisplay}`;
             }
 
+            // 標記選項的正確/錯誤狀態
             if (question.type === "multiple-choice") {
                 document.querySelectorAll('.option').forEach((option, index) => {
                     option.style.pointerEvents = 'none';
@@ -2398,6 +2442,7 @@
             currentQuestionIndex = (currentQuestionIndex + 1);
 
             if (currentQuestionIndex >= shuffledQuestions.length) {
+                // 循環回第一頁並重新打亂題目
                 currentQuestionIndex = 0;
                 shuffledQuestions = shuffleArray([...questions]);
                 shuffledQuestions = shuffledQuestions.map(q => shuffleQuestionOptions(q));
@@ -2410,6 +2455,66 @@
             totalAnsweredElement.textContent = totalAnswered;
             const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
             accuracyElement.textContent = `${accuracy}%`;
+            
+            // ⭐ 新增：如果錯誤題目數量大於 0，則顯示下載按鈕
+            downloadErrorsButton.style.display = incorrectQuestions.length > 0 ? 'block' : 'none'; 
+        }
+
+        // ⭐ 新增：下載錯誤題目的核心函數
+        function downloadIncorrectQuestions() {
+            if (incorrectQuestions.length === 0) {
+                alert("目前沒有錯誤題目可以下載！");
+                return;
+            }
+
+            let fileContent = "## 經濟學錯題本 - 複習清單\n\n";
+
+            incorrectQuestions.forEach((q, index) => {
+                const originalOptions = q.options;
+
+                let correctAnswerDisplay;
+                let typeText = "";
+                
+                if (q.type === "multiple-choice") {
+                    typeText = "單選題";
+                    correctAnswerDisplay = originalOptions[q.correctAnswer];
+                } else if (q.type === "multi-select") {
+                    typeText = "多選題";
+                    correctAnswerDisplay = q.correctAnswer.map(idx => originalOptions[idx]).join('、');
+                } else { // fill-in
+                    typeText = "填充題";
+                    correctAnswerDisplay = q.correctAnswer;
+                }
+
+                let optionsDisplay = "";
+                if (q.type !== "fill-in") {
+                    optionsDisplay = "\n" + originalOptions.map((opt, i) => `[${String.fromCharCode(65 + i)}] ${opt}`).join('\n');
+                }
+                
+                // 格式化輸出
+                fileContent += `--- 題目 ${index + 1} (${typeText}) ---\n`;
+                fileContent += `題目: ${q.question}\n`;
+                if (optionsDisplay) {
+                    fileContent += `選項:${optionsDisplay}\n`;
+                }
+                fileContent += `\n**正確答案**: ${correctAnswerDisplay}\n`;
+                if (q.explanation) {
+                     fileContent += `**解析**: ${q.explanation}\n`;
+                }
+                fileContent += "\n\n";
+            });
+
+            // 建立 Blob 並觸發下載
+            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const date = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+            a.download = `經濟學錯題本_${date}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         window.onload = init;
