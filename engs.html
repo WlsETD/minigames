@@ -1,0 +1,3546 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 0px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background-color: #16213e;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #2d3561;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode h1 {
+            color: #64ffda;
+        }
+
+        header p {
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode header p {
+            color: #a0a0a0;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .progress-bar {
+            background-color: #2d3561;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        body.dark-mode .progress {
+            background-color: #64ffda;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .question-number {
+            color: #a0a0a0;
+        }
+
+        .question-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .question-type-badge.multiple-choice {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        body.dark-mode .question-type-badge.multiple-choice {
+            background-color: #1a4d7a;
+            color: #64b5f6;
+        }
+
+        .question-type-badge.multi-select {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        body.dark-mode .question-type-badge.multi-select {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+
+        .question-type-badge.fill-in {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        body.dark-mode .question-type-badge.fill-in {
+            background-color: #4a148c;
+            color: #ce93d8;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .question-text {
+            color: #eaeaea;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+
+        body.dark-mode .option {
+            background-color: #0f3460;
+            border-color: #2d3561;
+            color: #eaeaea;
+        }
+
+        .option:hover {
+            background-color: #f8f9fa;
+            border-color: #bdc3c7;
+        }
+
+        body.dark-mode .option:hover {
+            background-color: #1a4d7a;
+            border-color: #64ffda;
+        }
+
+        .option.selected {
+            background-color: #e1f5fe;
+            border-color: #0288d1;
+        }
+
+        body.dark-mode .option.selected {
+            background-color: #1a4d7a;
+            border-color: #64ffda;
+        }
+
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        body.dark-mode .option.correct {
+            background-color: #1b5e20;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+
+        body.dark-mode .option.incorrect {
+            background-color: #b71c1c;
+            border-color: #f44336;
+        }
+
+        .fill-in-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background-color: white;
+            color: #333;
+        }
+
+        body.dark-mode .fill-in-input {
+            background-color: #0f3460;
+            border-color: #2d3561;
+            color: #eaeaea;
+        }
+
+        .fill-in-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        body.dark-mode .fill-in-input:focus {
+            border-color: #64ffda;
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+        }
+
+        .fill-in-input.correct {
+            border-color: #4caf50;
+            background-color: #e8f5e9;
+        }
+
+        body.dark-mode .fill-in-input.correct {
+            background-color: #1b5e20;
+            border-color: #4caf50;
+        }
+
+        .fill-in-input.incorrect {
+            border-color: #f44336;
+            background-color: #ffebee;
+        }
+
+        body.dark-mode .fill-in-input.incorrect {
+            background-color: #b71c1c;
+            border-color: #f44336;
+        }
+
+        .fill-in-hint {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        body.dark-mode .fill-in-hint {
+            color: #a0a0a0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        body.dark-mode .feedback.correct {
+            background-color: #1b5e20;
+            color: #4caf50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        body.dark-mode .feedback.incorrect {
+            background-color: #b71c1c;
+            color: #ef5350;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        #submit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        body.dark-mode #submit-btn {
+            background-color: #64ffda;
+            color: #1a1a2e;
+        }
+
+        body.dark-mode #submit-btn:hover {
+            background-color: #4dd0ba;
+        }
+
+        #submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        body.dark-mode #submit-btn:disabled {
+            background-color: #2d3561;
+            color: #666;
+        }
+
+        #next-btn {
+            background-color: #2ecc71;
+            color: white;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background-color: #27ae60;
+        }
+
+        body.dark-mode #next-btn {
+            background-color: #4caf50;
+        }
+
+        body.dark-mode #next-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .stats {
+            color: #a0a0a0;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .score {
+            color: #64ffda;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .theme-toggle {
+                font-size: 20px;
+            }
+        }
+
+
+        @keyframes start {
+            0% {
+                scale: 1;
+            }
+
+            100% {
+                scale: 5;
+                opacity: 0;
+                display: none;
+            }
+        }
+
+        @keyframes ii {
+            0% {
+                opacity: 0;
+                transform: translateY(250%);
+                filter: blur(5px);
+                scale: 0;
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0%);
+                filter: blur(0%);
+                scale: 1;
+            }
+        }
+
+        .start {
+            color: white;
+            background-color: #4f2e2e;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            animation: start 0.5s ease-in-out forwards;
+            animation-delay: 2.5s;
+            font-size: 7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 10000;
+        }
+
+        i.fa-a {
+            animation: ii 1s ease-out forwards;
+        }
+
+        i.fa-house {
+            color: #7d7d7d;
+        }
+        .home-btn {
+            top: 0;
+            left: 0;
+            border-radius: 100%;
+            background-color: white;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+        .home-btn:hover{
+            box-shadow: 0 0 10px white;
+            scale: 1.3;
+            border: 0;
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<div class="start">
+    <i class="fa-solid fa-a"></i>
+</div>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="https://wlsetd.github.io/minigames/menu" class="home-btn"><i class="fa-solid fa-house"></i></a>
+            <button class="theme-toggle" id="theme-toggle" aria-label="切換主題">🌙</button>
+            <h1>英文</h1>
+            <p>無限循環練習，鞏固英文知識</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question-container">
+            <div class="question-number" id="question-number">題目 1/7</div>
+            <div class="question-text" id="question-text"></div>
+
+            <div class="options" id="options-container"></div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="controls">
+            <button id="submit-btn">提交答案</button>
+            <button id="next-btn">下一題</button>
+        </div>
+
+        <div class="stats">
+            <div>已練習: <span class="score" id="total-answered">0</span> 題</div>
+            <div>正確率: <span class="score" id="accuracy">0%</span></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                type: "multiple-choice",
+                question: "champion 的中文意思是？",
+                options: [
+                    "挑戰者",
+                    "冠軍",
+                    "選手",
+                    "裁判"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "qualify 的中文意思是？",
+                options: [
+                    "取得資格",
+                    "放棄比賽",
+                    "參加訓練",
+                    "退出競爭"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "combination 的中文意思是？",
+                options: [
+                    "分離",
+                    "獨立",
+                    "混合，結合",
+                    "對抗"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "physical 的中文意思是？",
+                options: [
+                    "精神的",
+                    "身體的，物理的",
+                    "化學的",
+                    "生物的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "psychological 的中文意思是？",
+                options: [
+                    "生理的",
+                    "社會的",
+                    "心理的",
+                    "醫學的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "factor 的中文意思是？",
+                options: [
+                    "結果",
+                    "過程",
+                    "因素",
+                    "方法"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "elite 的中文意思是？",
+                options: [
+                    "業餘的",
+                    "普通的",
+                    "精英的",
+                    "初級的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "genetic 的中文意思是？",
+                options: [
+                    "環境的",
+                    "遺傳的",
+                    "後天的",
+                    "學習的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "differentiate 的中文意思是？",
+                options: [
+                    "使...相同",
+                    "使...不同",
+                    "使...混合",
+                    "使...結合"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "average 的中文意思是？",
+                options: [
+                    "特殊的",
+                    "平均的，一般的",
+                    "極端的",
+                    "稀有的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "skeletal 的中文意思是？",
+                options: [
+                    "肌肉的",
+                    "神經的",
+                    "骨骼的",
+                    "血管的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "muscle 的中文意思是？",
+                options: [
+                    "骨頭",
+                    "肌肉",
+                    "皮膚",
+                    "器官"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "require 的中文意思是？",
+                options: [
+                    "拒絕",
+                    "提供",
+                    "要求，需要",
+                    "放棄"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "generate 的中文意思是？",
+                options: [
+                    "消耗",
+                    "產生，生成",
+                    "減少",
+                    "停止"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "endure 的中文意思是？",
+                options: [
+                    "放棄",
+                    "逃避",
+                    "忍受，持久",
+                    "享受"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "pain 的中文意思是？",
+                options: [
+                    "快樂",
+                    "疼痛",
+                    "平靜",
+                    "興奮"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "disability 的中文意思是？",
+                options: [
+                    "能力",
+                    "優勢",
+                    "殘疾，障礙",
+                    "才能"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "substance 的中文意思是？",
+                options: [
+                    "空間",
+                    "物質",
+                    "時間",
+                    "能量"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "lactic 的中文意思是？",
+                options: [
+                    "胃酸的",
+                    "乳酸的",
+                    "尿酸的",
+                    "脂肪酸的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "adjust 的中文意思是？",
+                options: [
+                    "固定",
+                    "改變，調整",
+                    "保持",
+                    "破壞"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "enhance 的中文意思是？",
+                options: [
+                    "減弱",
+                    "破壞",
+                    "改善，提高",
+                    "維持"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "automatic 的中文意思是？",
+                options: [
+                    "手動的",
+                    "自動的",
+                    "機械的",
+                    "電動的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "succeed 的中文意思是？",
+                options: [
+                    "失敗",
+                    "嘗試",
+                    "成功",
+                    "放棄"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "determination 的中文意思是？",
+                options: [
+                    "猶豫",
+                    "決心",
+                    "懷疑",
+                    "害怕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "strive 的中文意思是？",
+                options: [
+                    "放鬆",
+                    "休息",
+                    "努力",
+                    "退縮"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "mental 的中文意思是？",
+                options: [
+                    "身體的",
+                    "精神的，心理的",
+                    "社會的",
+                    "環境的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "height 的中文意思是？",
+                options: [
+                    "寬度",
+                    "重量",
+                    "高度",
+                    "長度"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "suffer 的中文意思是？",
+                options: [
+                    "享受",
+                    "經歷，遭受",
+                    "避免",
+                    "慶祝"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "hemoglobin 的中文意思是？",
+                options: [
+                    "白血球",
+                    "血紅蛋白",
+                    "血小板",
+                    "血漿"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "culture 的中文意思是？",
+                options: [
+                    "自然",
+                    "科學",
+                    "文化",
+                    "技術"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "background 的中文意思是？",
+                options: [
+                    "前景",
+                    "背景",
+                    "側面",
+                    "中心"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "marathon 的中文意思是？",
+                options: [
+                    "短跑",
+                    "跳遠",
+                    "馬拉松",
+                    "跳高"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "control 的中文意思是？",
+                options: [
+                    "釋放",
+                    "控制",
+                    "放棄",
+                    "忽視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "fatigue 的中文意思是？",
+                options: [
+                    "精力",
+                    "活力",
+                    "疲勞",
+                    "興奮"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "maintain 的中文意思是？",
+                options: [
+                    "改變",
+                    "破壞",
+                    "保持，維持",
+                    "放棄"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "technique 的中文意思是？",
+                options: [
+                    "理論",
+                    "技術，技巧",
+                    "概念",
+                    "原則"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "pressure 的中文意思是？",
+                options: [
+                    "放鬆",
+                    "壓力",
+                    "安慰",
+                    "支持"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "exaggerate 的中文意思是？",
+                options: [
+                    "低估",
+                    "誇大",
+                    "準確",
+                    "簡化"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "compliment 的中文意思是？",
+                options: [
+                    "批評",
+                    "忽視",
+                    "稱讚，恭維",
+                    "責備"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "throughout 的中文意思是？",
+                options: [
+                    "開始時",
+                    "結束時",
+                    "在...期間，從頭到尾",
+                    "偶爾"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "originate 的中文意思是？",
+                options: [
+                    "結束",
+                    "起源於",
+                    "傳播",
+                    "消失"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "established 的中文意思是？",
+                options: [
+                    "拆除",
+                    "設立，建立",
+                    "破壞",
+                    "忽略"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "modern 的中文意思是？",
+                options: [
+                    "古代的",
+                    "現代的",
+                    "中世紀的",
+                    "未來的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "camaraderie 的中文意思是？",
+                options: [
+                    "競爭",
+                    "敵對",
+                    "友情，同志情誼",
+                    "冷漠"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "victory 的中文意思是？",
+                options: [
+                    "失敗",
+                    "勝利",
+                    "平局",
+                    "比賽"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "defeat 的中文意思是？",
+                options: [
+                    "勝利",
+                    "失敗，擊敗",
+                    "平手",
+                    "挑戰"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "international 的中文意思是？",
+                options: [
+                    "國內的",
+                    "地區的",
+                    "國際的",
+                    "全國的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "promise 的中文意思是？",
+                options: [
+                    "威脅",
+                    "警告",
+                    "承諾，前景",
+                    "懷疑"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "universal 的中文意思是？",
+                options: [
+                    "特殊的",
+                    "普遍的，全球的",
+                    "個別的",
+                    "局部的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "appeal 的中文意思是？",
+                options: [
+                    "排斥",
+                    "吸引力",
+                    "厭惡",
+                    "反感"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unique 的中文意思是？",
+                options: [
+                    "普通的",
+                    "常見的",
+                    "獨特的，唯一的",
+                    "重複的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "simplicity 的中文意思是？",
+                options: [
+                    "複雜性",
+                    "困難",
+                    "簡單性",
+                    "混亂"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "stadium 的中文意思是？",
+                options: [
+                    "教室",
+                    "體育場，體育館",
+                    "圖書館",
+                    "辦公室"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "recruit 的中文意思是？",
+                options: [
+                    "解僱",
+                    "招募",
+                    "退休",
+                    "辭職"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "passion 的中文意思是？",
+                options: [
+                    "冷漠",
+                    "無聊",
+                    "熱情",
+                    "厭倦"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "responsible 的中文意思是？",
+                options: [
+                    "不負責的",
+                    "負責任的",
+                    "隨便的",
+                    "粗心的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "discrimination 的中文意思是？",
+                options: [
+                    "平等",
+                    "公正",
+                    "歧視",
+                    "尊重"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "immigrant 的中文意思是？",
+                options: [
+                    "本地人",
+                    "移民，僑民",
+                    "遊客",
+                    "居民"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unity 的中文意思是？",
+                options: [
+                    "分裂",
+                    "衝突",
+                    "統一，團結",
+                    "對立"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "colonist 的中文意思是？",
+                options: [
+                    "原住民",
+                    "殖民者",
+                    "探險家",
+                    "商人"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "creative 的中文意思是？",
+                options: [
+                    "保守的",
+                    "傳統的",
+                    "有創意的",
+                    "平凡的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "competition 的中文意思是？",
+                options: [
+                    "合作",
+                    "競爭",
+                    "協調",
+                    "和解"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "competitors 的中文意思是？",
+                options: [
+                    "隊友",
+                    "競爭者",
+                    "裁判",
+                    "觀眾"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "uniform 的中文意思是？",
+                options: [
+                    "便服",
+                    "制服，相同的",
+                    "休閒服",
+                    "正裝"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unite 的中文意思是？",
+                options: [
+                    "分開",
+                    "分離",
+                    "結合，團結",
+                    "分裂"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "anthropology 的中文意思是？",
+                options: [
+                    "人類學",
+                    "動物學",
+                    "植物學",
+                    "天文學"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "biology 的中文意思是？",
+                options: [
+                    "化學",
+                    "物理學",
+                    "生物學",
+                    "地理學"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "geology 的中文意思是？",
+                options: [
+                    "氣象學",
+                    "地質學",
+                    "海洋學",
+                    "天文學"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "psychology 的中文意思是？",
+                options: [
+                    "社會學",
+                    "哲學",
+                    "心理學",
+                    "經濟學"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "swimmer 的中文意思是？",
+                options: [
+                    "跑者",
+                    "游泳者",
+                    "騎士",
+                    "登山者"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "completed 的中文意思是？",
+                options: [
+                    "開始",
+                    "完成",
+                    "中斷",
+                    "放棄"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "expedition 的中文意思是？",
+                options: [
+                    "旅遊",
+                    "探險，遠征",
+                    "散步",
+                    "購物"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "equipment 的中文意思是？",
+                options: [
+                    "裝備，設備",
+                    "衣服",
+                    "食物",
+                    "書籍"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "slowed 的中文意思是？",
+                options: [
+                    "加速",
+                    "減慢",
+                    "停止",
+                    "跳躍"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "previous 的中文意思是？",
+                options: [
+                    "未來的",
+                    "現在的",
+                    "以前的",
+                    "永久的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "stung 的中文意思是？",
+                options: [
+                    "撫摸",
+                    "刺，蜇",
+                    "擁抱",
+                    "親吻"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "jellyfish 的中文意思是？",
+                options: [
+                    "章魚",
+                    "鯊魚",
+                    "水母",
+                    "海豚"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "difference 的中文意思是？",
+                options: [
+                    "相似",
+                    "一致",
+                    "區別",
+                    "相同"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "source 的中文意思是？",
+                options: [
+                    "結果",
+                    "來源",
+                    "結論",
+                    "終點"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "stomach 的中文意思是？",
+                options: [
+                    "心臟",
+                    "肺",
+                    "胃",
+                    "肝臟"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "cheer 的中文意思是？",
+                options: [
+                    "哭泣",
+                    "歡呼",
+                    "抱怨",
+                    "嘆息"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "runner 的中文意思是？",
+                options: [
+                    "游泳者",
+                    "跑者",
+                    "跳高者",
+                    "射箭者"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "capacity 的中文意思是？",
+                options: [
+                    "缺陷",
+                    "能力，容量",
+                    "弱點",
+                    "限制"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "tiny 的中文意思是？",
+                options: [
+                    "巨大的",
+                    "微小的",
+                    "中等的",
+                    "龐大的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "explosive 的中文意思是？",
+                options: [
+                    "平靜的",
+                    "緩慢的",
+                    "爆炸性的，爆發的",
+                    "溫和的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "movement 的中文意思是？",
+                options: [
+                    "靜止",
+                    "移動",
+                    "休息",
+                    "停留"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "altitude 的中文意思是？",
+                options: [
+                    "深度",
+                    "海拔，高度",
+                    "寬度",
+                    "長度"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "blood 的中文意思是？",
+                options: [
+                    "淋巴",
+                    "血液",
+                    "唾液",
+                    "汗液"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "complex 的中文意思是？",
+                options: [
+                    "簡單的",
+                    "複雜的",
+                    "容易的",
+                    "清楚的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "essential 的中文意思是？",
+                options: [
+                    "可選的",
+                    "不重要的",
+                    "必要的",
+                    "多餘的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "hydration 的中文意思是？",
+                options: [
+                    "脫水",
+                    "乾燥",
+                    "水合作用",
+                    "蒸發"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "nutrition 的中文意思是？",
+                options: [
+                    "飢餓",
+                    "營養",
+                    "疾病",
+                    "毒素"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "overcome 的中文意思是？",
+                options: [
+                    "屈服",
+                    "放棄",
+                    "克服",
+                    "逃避"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "physiologist 的中文意思是？",
+                options: [
+                    "化學家",
+                    "生理學家",
+                    "物理學家",
+                    "數學家"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "strain 的中文意思是？",
+                options: [
+                    "放鬆",
+                    "緊張，壓力",
+                    "快樂",
+                    "平靜"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "theory 的中文意思是？",
+                options: [
+                    "事實",
+                    "理論",
+                    "實驗",
+                    "證據"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "ancient 的中文意思是？",
+                options: [
+                    "現代的",
+                    "未來的",
+                    "古代的",
+                    "當代的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "originated 的中文意思是？",
+                options: [
+                    "結束",
+                    "起源",
+                    "消失",
+                    "傳播"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "federation 的中文意思是？",
+                options: [
+                    "個體",
+                    "分裂",
+                    "聯邦，聯盟",
+                    "組織"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "striker 的中文意思是？",
+                options: [
+                    "守門員",
+                    "前鋒",
+                    "後衛",
+                    "中場"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "defeated 的中文意思是？",
+                options: [
+                    "獲勝",
+                    "擊敗",
+                    "平局",
+                    "放棄"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "worldwide 的中文意思是？",
+                options: [
+                    "本地的",
+                    "區域的",
+                    "全世界的",
+                    "國內的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "discipline 的中文意思是？",
+                options: [
+                    "自由",
+                    "紀律",
+                    "放縱",
+                    "隨意"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "symbol 的中文意思是？",
+                options: [
+                    "事實",
+                    "符號，象徵",
+                    "證據",
+                    "理論"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "tribal 的中文意思是？",
+                options: [
+                    "現代的",
+                    "城市的",
+                    "部落的",
+                    "國家的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "involvement 的中文意思是？",
+                options: [
+                    "參與，涉入",
+                    "退出",
+                    "逃避",
+                    "忽視"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "solve 的中文意思是？",
+                options: [
+                    "製造",
+                    "解決",
+                    "忽略",
+                    "放棄"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "religious 的中文意思是？",
+                options: [
+                    "世俗的",
+                    "科學的",
+                    "宗教的",
+                    "政治的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "promote 的中文意思是？",
+                options: [
+                    "阻止",
+                    "促進",
+                    "破壞",
+                    "反對"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "peace 的中文意思是？",
+                options: [
+                    "戰爭",
+                    "衝突",
+                    "和平",
+                    "混亂"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "frequent 的中文意思是？",
+                options: [
+                    "罕見的",
+                    "頻繁的",
+                    "偶爾的",
+                    "從不的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "doubt 的中文意思是？",
+                options: [
+                    "確定",
+                    "懷疑",
+                    "相信",
+                    "肯定"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "trouble 的中文意思是？",
+                options: [
+                    "幫助",
+                    "麻煩",
+                    "快樂",
+                    "順利"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "explore 的中文意思是？",
+                options: [
+                    "忽視",
+                    "探索",
+                    "放棄",
+                    "逃避"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "connect 的中文意思是？",
+                options: [
+                    "分離",
+                    "連結",
+                    "切斷",
+                    "隔離"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "referee 的中文意思是？",
+                options: [
+                    "選手",
+                    "教練",
+                    "裁判",
+                    "觀眾"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "penalty 的中文意思是？",
+                options: [
+                    "獎勵",
+                    "懲罰",
+                    "讚美",
+                    "鼓勵"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "subjective 的中文意思是？",
+                options: [
+                    "客觀的",
+                    "主觀的",
+                    "中立的",
+                    "公正的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "varies 的中文意思是？",
+                options: [
+                    "固定",
+                    "改變",
+                    "保持",
+                    "穩定"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "biologist 的中文意思是？",
+                options: [
+                    "化學家",
+                    "物理學家",
+                    "生物學家",
+                    "地質學家"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "anthropologist 的中文意思是？",
+                options: [
+                    "人類學家",
+                    "社會學家",
+                    "心理學家",
+                    "考古學家"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "characteristic 的中文意思是？",
+                options: [
+                    "缺點",
+                    "優勢",
+                    "特徵",
+                    "弱點"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "define 的中文意思是？",
+                options: [
+                    "模糊",
+                    "定義",
+                    "混淆",
+                    "忽略"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "appearance 的中文意思是？",
+                options: [
+                    "內在",
+                    "外表",
+                    "性格",
+                    "本質"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "ideal 的中文意思是？",
+                options: [
+                    "糟糕的",
+                    "一般的",
+                    "完美的",
+                    "普通的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "attractiveness 的中文意思是？",
+                options: [
+                    "排斥力",
+                    "吸引力",
+                    "厭惡",
+                    "反感"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "preference 的中文意思是？",
+                options: [
+                    "厭惡",
+                    "偏好",
+                    "反感",
+                    "排斥"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "society 的中文意思是？",
+                options: [
+                    "個人",
+                    "家庭",
+                    "社會",
+                    "組織"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "influence 的中文意思是？",
+                options: [
+                    "影響",
+                    "忽視",
+                    "避免",
+                    "拒絕"
+                ],
+                correctAnswer: 0
+            },
+            {
+                type: "multiple-choice",
+                question: "region 的中文意思是？",
+                options: [
+                    "國家",
+                    "地區",
+                    "城市",
+                    "大陸"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "measure 的中文意思是？",
+                options: [
+                    "猜測",
+                    "測量",
+                    "估計",
+                    "忽略"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "standard 的中文意思是？",
+                options: [
+                    "隨意",
+                    "標準",
+                    "例外",
+                    "特殊"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "confident 的中文意思是？",
+                options: [
+                    "膽怯的",
+                    "自信的",
+                    "害羞的",
+                    "懷疑的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "feature 的中文意思是？",
+                options: [
+                    "缺點",
+                    "特徵",
+                    "弱點",
+                    "錯誤"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "concept 的中文意思是？",
+                options: [
+                    "事實",
+                    "概念",
+                    "證據",
+                    "實例"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "associate 的中文意思是？",
+                options: [
+                    "分離",
+                    "聯想",
+                    "忘記",
+                    "忽視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "generation 的中文意思是？",
+                options: [
+                    "個人",
+                    "世代",
+                    "家族",
+                    "群體"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "experiment 的中文意思是？",
+                options: [
+                    "理論",
+                    "實驗",
+                    "觀察",
+                    "猜測"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "respond 的中文意思是？",
+                options: [
+                    "忽視",
+                    "回應",
+                    "拒絕",
+                    "逃避"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "environment 的中文意思是？",
+                options: [
+                    "人物",
+                    "環境",
+                    "事件",
+                    "時間"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "population 的中文意思是？",
+                options: [
+                    "土地",
+                    "人口",
+                    "資源",
+                    "財富"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "tradition 的中文意思是？",
+                options: [
+                    "創新",
+                    "傳統",
+                    "現代",
+                    "未來"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "media 的中文意思是？",
+                options: [
+                    "政府",
+                    "媒體",
+                    "學校",
+                    "企業"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "global 的中文意思是？",
+                options: [
+                    "本地的",
+                    "區域的",
+                    "全球的",
+                    "國內的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "universal 的中文意思是？",
+                options: [
+                    "特殊的",
+                    "普遍的",
+                    "罕見的",
+                    "個別的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unique 的中文意思是？",
+                options: [
+                    "普通的",
+                    "獨特的",
+                    "常見的",
+                    "一般的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "internal 的中文意思是？",
+                options: [
+                    "外部的",
+                    "內在的",
+                    "表面的",
+                    "周圍的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "external 的中文意思是？",
+                options: [
+                    "內部的",
+                    "外部的",
+                    "中心的",
+                    "核心的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "evidence 的中文意思是？",
+                options: [
+                    "猜測",
+                    "證據",
+                    "假設",
+                    "意見"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "research 的中文意思是？",
+                options: [
+                    "猜測",
+                    "研究",
+                    "想像",
+                    "假設"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "scientific 的中文意思是？",
+                options: [
+                    "藝術的",
+                    "科學的",
+                    "宗教的",
+                    "哲學的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "emotion 的中文意思是？",
+                options: [
+                    "理智",
+                    "情感",
+                    "邏輯",
+                    "思考"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "create 的中文意思是？",
+                options: [
+                    "破壞",
+                    "創造",
+                    "模仿",
+                    "複製"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "represent 的中文意思是？",
+                options: [
+                    "隱藏",
+                    "代表",
+                    "否認",
+                    "拒絕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "appreciate 的中文意思是？",
+                options: [
+                    "批評",
+                    "欣賞",
+                    "厭惡",
+                    "忽視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "emphasize 的中文意思是？",
+                options: [
+                    "忽略",
+                    "強調",
+                    "輕視",
+                    "隱藏"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "idealize 的中文意思是？",
+                options: [
+                    "批評",
+                    "理想化",
+                    "現實化",
+                    "簡化"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "respondent 的中文意思是？",
+                options: [
+                    "提問者",
+                    "回答者",
+                    "觀察者",
+                    "旁觀者"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "attractive 的中文意思是？",
+                options: [
+                    "醜陋的",
+                    "有吸引力的",
+                    "平凡的",
+                    "普通的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "fashion 的中文意思是？",
+                options: [
+                    "傳統",
+                    "時尚",
+                    "古典",
+                    "過時"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "advertising 的中文意思是？",
+                options: [
+                    "新聞",
+                    "廣告",
+                    "報導",
+                    "評論"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "select 的中文意思是？",
+                options: [
+                    "拒絕",
+                    "選擇",
+                    "放棄",
+                    "忽視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "desire 的中文意思是？",
+                options: [
+                    "厭惡",
+                    "渴望",
+                    "拒絕",
+                    "避免"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "model 的中文意思是？",
+                options: [
+                    "觀眾",
+                    "模特兒",
+                    "導演",
+                    "製作人"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "publication 的中文意思是？",
+                options: [
+                    "廣播",
+                    "刊物",
+                    "電影",
+                    "音樂"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "artist 的中文意思是？",
+                options: [
+                    "科學家",
+                    "藝術家",
+                    "工程師",
+                    "醫生"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "illustrate 的中文意思是？",
+                options: [
+                    "隱藏",
+                    "說明",
+                    "混淆",
+                    "忽視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "value 的中文意思是？",
+                options: [
+                    "代價",
+                    "價值",
+                    "損失",
+                    "浪費"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "individual 的中文意思是？",
+                options: [
+                    "集體的",
+                    "個人的",
+                    "群體的",
+                    "公共的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "surrounding 的中文意思是？",
+                options: [
+                    "中心的",
+                    "周圍的",
+                    "遠處的",
+                    "內部的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "achievement 的中文意思是？",
+                options: [
+                    "失敗",
+                    "成就",
+                    "錯誤",
+                    "損失"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "exceedingly 的中文意思是？",
+                options: [
+                    "稍微地",
+                    "極度地",
+                    "一般地",
+                    "普通地"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "appearances 的中文意思是？",
+                options: [
+                    "內在",
+                    "外表",
+                    "本質",
+                    "性格"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "shore 的中文意思是？",
+                options: [
+                    "山頂",
+                    "海岸",
+                    "沙漠",
+                    "森林"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "proper 的中文意思是？",
+                options: [
+                    "錯誤的",
+                    "適當的",
+                    "隨意的",
+                    "不當的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "peninsula 的中文意思是？",
+                options: [
+                    "島嶼",
+                    "半島",
+                    "海灣",
+                    "海峽"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "cliffs 的中文意思是？",
+                options: [
+                    "平原",
+                    "懸崖",
+                    "山谷",
+                    "丘陵"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "kayaking 的中文意思是？",
+                options: [
+                    "游泳",
+                    "划皮艇",
+                    "衝浪",
+                    "潛水"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "photograph 的中文意思是？",
+                options: [
+                    "繪畫",
+                    "攝影",
+                    "雕刻",
+                    "書法"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "feathers 的中文意思是？",
+                options: [
+                    "鱗片",
+                    "羽毛",
+                    "毛皮",
+                    "殼"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "fulmar 的中文意思是？",
+                options: [
+                    "海豚",
+                    "管鼻鸌",
+                    "企鵝",
+                    "信天翁"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "gull 的中文意思是？",
+                options: [
+                    "老鷹",
+                    "海鷗",
+                    "麻雀",
+                    "燕子"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "puffin 的中文意思是？",
+                options: [
+                    "鴿子",
+                    "海鸚",
+                    "烏鴉",
+                    "鸚鵡"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "certainty 的中文意思是？",
+                options: [
+                    "懷疑",
+                    "確定性",
+                    "不確定",
+                    "猶豫"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "come apart 的中文意思是？",
+                options: [
+                    "結合",
+                    "分開",
+                    "聚集",
+                    "合併"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "close quarters 的中文意思是？",
+                options: [
+                    "遠距離",
+                    "近距離",
+                    "中距離",
+                    "無距離"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "examination 的中文意思是？",
+                options: [
+                    "忽視",
+                    "檢查",
+                    "放棄",
+                    "逃避"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "creepy-crawlies 的中文意思是？",
+                options: [
+                    "大動物",
+                    "小蟲子",
+                    "鳥類",
+                    "魚類"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "lens 的中文意思是？",
+                options: [
+                    "閃光燈",
+                    "鏡頭",
+                    "電池",
+                    "記憶卡"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "twisting 的中文意思是？",
+                options: [
+                    "拉直",
+                    "扭轉",
+                    "壓平",
+                    "展開"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "exploring 的中文意思是？",
+                options: [
+                    "停留",
+                    "探索",
+                    "休息",
+                    "觀望"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "reflected 的中文意思是？",
+                options: [
+                    "吸收",
+                    "反射",
+                    "穿透",
+                    "消失"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "Icelandic 的中文意思是？",
+                options: [
+                    "挪威的",
+                    "冰島的",
+                    "芬蘭的",
+                    "瑞典的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "harmonized 的中文意思是？",
+                options: [
+                    "衝突",
+                    "和諧",
+                    "對立",
+                    "分裂"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "intricate 的中文意思是？",
+                options: [
+                    "簡單的",
+                    "複雜的",
+                    "粗糙的",
+                    "基本的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "delicate 的中文意思是？",
+                options: [
+                    "粗糙的",
+                    "精緻的",
+                    "堅硬的",
+                    "厚重的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "vanes 的中文意思是？",
+                options: [
+                    "羽軸",
+                    "羽片",
+                    "羽毛",
+                    "羽絨"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "viewfinder 的中文意思是？",
+                options: [
+                    "快門",
+                    "取景器",
+                    "光圈",
+                    "對焦環"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "marveling 的中文意思是？",
+                options: [
+                    "抱怨",
+                    "驚嘆",
+                    "批評",
+                    "無視"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "suggested 的中文意思是？",
+                options: [
+                    "命令",
+                    "暗示",
+                    "拒絕",
+                    "否認"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "pristine 的中文意思是？",
+                options: [
+                    "污染的",
+                    "破舊的",
+                    "原始的",
+                    "現代的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "splendor 的中文意思是？",
+                options: [
+                    "黯淡",
+                    "壯麗",
+                    "簡陋",
+                    "平凡"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "vowed 的中文意思是？",
+                options: [
+                    "懷疑",
+                    "發誓",
+                    "猜測",
+                    "放棄"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "voyage 的中文意思是？",
+                options: [
+                    "停留",
+                    "航行",
+                    "居住",
+                    "休息"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "novel 的中文意思是？",
+                options: [
+                    "傳統的",
+                    "古老的",
+                    "新穎的",
+                    "熟悉的"
+                ],
+                correctAnswer: 2
+            },
+            {
+                type: "multiple-choice",
+                question: "images 的中文意思是？",
+                options: [
+                    "聲音",
+                    "圖像",
+                    "文字",
+                    "數字"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "descriptive 的中文意思是？",
+                options: [
+                    "批評的",
+                    "描述性的",
+                    "命令的",
+                    "質疑的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "suggestive 的中文意思是？",
+                options: [
+                    "明確的",
+                    "暗示的",
+                    "直接的",
+                    "清楚的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "imagination 的中文意思是？",
+                options: [
+                    "現實",
+                    "想像力",
+                    "記憶",
+                    "理性"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "attribute 的中文意思是？",
+                options: [
+                    "忽視",
+                    "歸因於",
+                    "否認",
+                    "拒絕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "generate 的中文意思是？",
+                options: [
+                    "消耗",
+                    "產生",
+                    "破壞",
+                    "減少"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "differentiate 的中文意思是？",
+                options: [
+                    "混合",
+                    "區分",
+                    "統一",
+                    "結合"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "psychological 的中文意思是？",
+                options: [
+                    "生理的",
+                    "心理的",
+                    "物理的",
+                    "化學的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "adjust 的中文意思是？",
+                options: [
+                    "固定",
+                    "調整",
+                    "破壞",
+                    "忽略"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "acknowledge 的中文意思是？",
+                options: [
+                    "否認",
+                    "承認",
+                    "懷疑",
+                    "拒絕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "enhance 的中文意思是？",
+                options: [
+                    "減弱",
+                    "增強",
+                    "破壞",
+                    "維持"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "genetic 的中文意思是？",
+                options: [
+                    "環境的",
+                    "基因的",
+                    "後天的",
+                    "學習的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "champion 的中文意思是？",
+                options: [
+                    "失敗者",
+                    "冠軍",
+                    "觀眾",
+                    "裁判"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "automatic 的中文意思是？",
+                options: [
+                    "手動的",
+                    "自動的",
+                    "機械的",
+                    "人工的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "enrich 的中文意思是？",
+                options: [
+                    "貧乏",
+                    "豐富",
+                    "簡化",
+                    "削減"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "motion 的中文意思是？",
+                options: [
+                    "靜止",
+                    "動作",
+                    "休息",
+                    "停頓"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "proclaim 的中文意思是？",
+                options: [
+                    "隱瞞",
+                    "宣告",
+                    "否認",
+                    "懷疑"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "participate 的中文意思是？",
+                options: [
+                    "退出",
+                    "參與",
+                    "觀望",
+                    "拒絕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "uniform 的中文意思是？",
+                options: [
+                    "不同的",
+                    "統一的",
+                    "多樣的",
+                    "混亂的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unique 的中文意思是？",
+                options: [
+                    "普通的",
+                    "獨特的",
+                    "常見的",
+                    "一般的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "defeat 的中文意思是？",
+                options: [
+                    "獲勝",
+                    "擊敗",
+                    "平局",
+                    "放棄"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "detour 的中文意思是？",
+                options: [
+                    "直行",
+                    "繞道",
+                    "停止",
+                    "前進"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "unified 的中文意思是？",
+                options: [
+                    "分裂的",
+                    "統一的",
+                    "對立的",
+                    "混亂的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "mate 的中文意思是？",
+                options: [
+                    "敵人",
+                    "伴侶",
+                    "陌生人",
+                    "競爭者"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "mature 的中文意思是？",
+                options: [
+                    "幼稚的",
+                    "成熟的",
+                    "年輕的",
+                    "未成年的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "altered 的中文意思是？",
+                options: [
+                    "保持的",
+                    "改變的",
+                    "固定的",
+                    "原始的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "notion 的中文意思是？",
+                options: [
+                    "事實",
+                    "概念",
+                    "證據",
+                    "結果"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "devote 的中文意思是？",
+                options: [
+                    "放棄",
+                    "奉獻",
+                    "忽視",
+                    "拒絕"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "subjective 的中文意思是？",
+                options: [
+                    "客觀的",
+                    "主觀的",
+                    "中立的",
+                    "公正的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "proactive 的中文意思是？",
+                options: [
+                    "被動的",
+                    "主動的",
+                    "消極的",
+                    "遲緩的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "protective 的中文意思是？",
+                options: [
+                    "傷害的",
+                    "保護的",
+                    "攻擊的",
+                    "破壞的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "criticize 的中文意思是？",
+                options: [
+                    "讚美",
+                    "批評",
+                    "鼓勵",
+                    "支持"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "crucial 的中文意思是？",
+                options: [
+                    "次要的",
+                    "關鍵的",
+                    "無關的",
+                    "普通的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "permanent 的中文意思是？",
+                options: [
+                    "暫時的",
+                    "永久的",
+                    "短期的",
+                    "瞬間的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "premature 的中文意思是？",
+                options: [
+                    "準時的",
+                    "過早的",
+                    "延遲的",
+                    "恰當的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "sector 的中文意思是？",
+                options: [
+                    "整體",
+                    "部門",
+                    "全部",
+                    "中心"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "fade 的中文意思是？",
+                options: [
+                    "增強",
+                    "褪色",
+                    "鮮豔",
+                    "明亮"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "criminal 的中文意思是？",
+                options: [
+                    "警察",
+                    "罪犯",
+                    "法官",
+                    "律師"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "leisure 的中文意思是？",
+                options: [
+                    "工作",
+                    "休閒",
+                    "忙碌",
+                    "勞動"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "external 的中文意思是？",
+                options: [
+                    "內部的",
+                    "外部的",
+                    "中心的",
+                    "核心的"
+                ],
+                correctAnswer: 1
+            },
+            {
+                type: "multiple-choice",
+                question: "status 的中文意思是？",
+                options: [
+                    "過程",
+                    "地位",
+                    "方法",
+                    "原因"
+                ],
+                correctAnswer: 1
+            },
+           
+        ];
+
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let selectedOptions = new Set();
+        let fillInAnswer = "";
+        let totalAnswered = 0;
+        let correctAnswers = 0;
+
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackElement = document.getElementById('feedback');
+        const submitButton = document.getElementById('submit-btn');
+        const nextButton = document.getElementById('next-btn');
+        const progressElement = document.getElementById('progress');
+        const totalAnsweredElement = document.getElementById('total-answered');
+        const accuracyElement = document.getElementById('accuracy');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function shuffleQuestionOptions(question) {
+            if (question.type === "fill-in") {
+                return question;
+            }
+
+            if (question.type === "multiple-choice") {
+                const correctAnswerText = question.options[question.correctAnswer];
+                const indices = question.options.map((_, i) => i);
+                const shuffledIndices = shuffleArray(indices);
+                const shuffledOptions = shuffledIndices.map(i => question.options[i]);
+                const newCorrectAnswer = shuffledOptions.indexOf(correctAnswerText);
+
+                return {
+                    ...question,
+                    options: shuffledOptions,
+                    correctAnswer: newCorrectAnswer
+                };
+            }
+
+            if (question.type === "multi-select") {
+                const correctAnswerTexts = question.correctAnswer.map(idx => question.options[idx]);
+                const indices = question.options.map((_, i) => i);
+                const shuffledIndices = shuffleArray(indices);
+                const shuffledOptions = shuffledIndices.map(i => question.options[i]);
+                const newCorrectAnswers = correctAnswerTexts.map(text => shuffledOptions.indexOf(text));
+
+                return {
+                    ...question,
+                    options: shuffledOptions,
+                    correctAnswer: newCorrectAnswers
+                };
+            }
+
+            return question;
+        }
+
+        function init() {
+            loadTheme();
+            shuffledQuestions = shuffleArray([...questions]);
+            shuffledQuestions = shuffledQuestions.map(q => shuffleQuestionOptions(q));
+
+            displayQuestion();
+            updateStats();
+
+            themeToggle.addEventListener('click', toggleTheme);
+            submitButton.addEventListener('click', checkAnswer);
+            nextButton.addEventListener('click', nextQuestion);
+        }
+
+        function displayQuestion() {
+            const question = shuffledQuestions[currentQuestionIndex];
+
+            let typeBadge;
+            if (question.type === "multiple-choice") {
+                typeBadge = '<span class="question-type-badge multiple-choice">單選題</span>';
+            } else if (question.type === "multi-select") {
+                typeBadge = '<span class="question-type-badge multi-select">多選題</span>';
+            } else {
+                typeBadge = '<span class="question-type-badge fill-in">填充題</span>';
+            }
+
+            questionNumberElement.innerHTML = `題目 ${currentQuestionIndex + 1}/${shuffledQuestions.length} ${typeBadge}`;
+            questionTextElement.textContent = question.question;
+            progressElement.style.width = `${((currentQuestionIndex + 1) / shuffledQuestions.length) * 100}%`;
+
+            optionsContainer.innerHTML = '';
+            selectedOptions.clear();
+
+            if (question.type === "multiple-choice") {
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.dataset.index = index;
+
+                    optionElement.addEventListener('click', () => {
+                        if (submitButton.style.display === 'none') return;
+
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+
+                        optionElement.classList.add('selected');
+                        selectedOption = index;
+                        submitButton.disabled = false;
+                    });
+
+                    optionsContainer.appendChild(optionElement);
+                });
+            } else if (question.type === "multi-select") {
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.dataset.index = index;
+
+                    optionElement.addEventListener('click', () => {
+                        if (submitButton.style.display === 'none') return;
+
+                        if (selectedOptions.has(index)) {
+                            selectedOptions.delete(index);
+                            optionElement.classList.remove('selected');
+                        } else {
+                            selectedOptions.add(index);
+                            optionElement.classList.add('selected');
+                        }
+
+                        submitButton.disabled = selectedOptions.size === 0;
+                    });
+
+                    optionsContainer.appendChild(optionElement);
+                });
+            } else {
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.className = 'fill-in-input';
+                inputElement.placeholder = '請輸入答案...';
+                inputElement.id = 'fill-in-input';
+
+                inputElement.addEventListener('input', (e) => {
+                    fillInAnswer = e.target.value.trim();
+                    submitButton.disabled = fillInAnswer.length === 0;
+                });
+
+                inputElement.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && fillInAnswer.length > 0) {
+                        checkAnswer();
+                    }
+                });
+
+                optionsContainer.appendChild(inputElement);
+
+                const hintElement = document.createElement('div');
+                hintElement.className = 'fill-in-hint';
+                hintElement.textContent = '💡 提示：輸入完成後按 Enter 或點擊提交按鈕';
+                optionsContainer.appendChild(hintElement);
+
+                setTimeout(() => inputElement.focus(), 100);
+            }
+
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+            submitButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            submitButton.disabled = true;
+            selectedOption = null;
+            fillInAnswer = "";
+        }
+
+        function checkAnswer() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            let isCorrect = false;
+
+            if (question.type === "multiple-choice") {
+                if (selectedOption === null) return;
+                isCorrect = selectedOption === question.correctAnswer;
+            } else if (question.type === "multi-select") {
+                if (selectedOptions.size === 0) return;
+                const correctSet = new Set(question.correctAnswer);
+                isCorrect = selectedOptions.size === correctSet.size &&
+                    [...selectedOptions].every(idx => correctSet.has(idx));
+            } else {
+                if (fillInAnswer.length === 0) return;
+                const normalizedAnswer = fillInAnswer.toLowerCase().replace(/\s+/g, '');
+                isCorrect = question.acceptableAnswers.some(answer =>
+                    answer.toLowerCase().replace(/\s+/g, '') === normalizedAnswer
+                );
+            }
+
+            totalAnswered++;
+            if (isCorrect) correctAnswers++;
+            updateStats();
+
+            if (isCorrect) {
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.textContent = '✓ 回答正確！';
+            } else {
+                feedbackElement.className = 'feedback incorrect';
+                if (question.type === "multiple-choice") {
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.options[question.correctAnswer]}`;
+                } else if (question.type === "multi-select") {
+                    const correctAnswers = question.correctAnswer.map(idx => question.options[idx]).join('、');
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${correctAnswers}`;
+                } else {
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.correctAnswer}`;
+                }
+            }
+
+            if (question.type === "multiple-choice") {
+                document.querySelectorAll('.option').forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+
+                    if (index === question.correctAnswer) {
+                        option.classList.add('correct');
+                        option.classList.remove('selected');
+                    } else if (index === selectedOption && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            } else if (question.type === "multi-select") {
+                const correctSet = new Set(question.correctAnswer);
+                document.querySelectorAll('.option').forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+
+                    if (correctSet.has(index)) {
+                        option.classList.add('correct');
+                        option.classList.remove('selected');
+                    } else if (selectedOptions.has(index)) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            } else {
+                const inputElement = document.getElementById('fill-in-input');
+                inputElement.disabled = true;
+                inputElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+
+            submitButton.style.display = 'none';
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1);
+
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                currentQuestionIndex = 0;
+                shuffledQuestions = shuffleArray([...questions]);
+                shuffledQuestions = shuffledQuestions.map(q => shuffleQuestionOptions(q));
+            }
+
+            displayQuestion();
+        }
+
+        function updateStats() {
+            totalAnsweredElement.textContent = totalAnswered;
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            accuracyElement.textContent = `${accuracy}%`;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
