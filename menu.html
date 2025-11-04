@@ -56,6 +56,10 @@
         padding: 0;
         margin: 0;
         position: relative;
+        background-attachment: fixed;
+        background-size: cover;
+        background-image: url(https://rare-gallery.com/uploads/posts/4546635-thefatrat-jordan-grimmer-mountains-planet-fantasy-art.jpg);
+
     }
 
     .p {
@@ -64,9 +68,9 @@
         text-align: center;
     }
 
-    .st section {
+    section {
         position: relative;
-        padding: 100px;
+        padding: 200px;
         margin: 0 auto;
         overflow-x: hidden;
 
@@ -77,23 +81,24 @@
     }
 
     .col-lg {
-        box-shadow: 20px 20px 0 #f5ebe0;
+        box-shadow: 20px 20px 0 #75809c;
         height: 30vh;
-        border-radius: 20px;
-        border: solid 5px #f5ebe0;
+        border-radius: 40px;
+        border: solid 10px #75809c;
         transition: 0.5s;
         align-items: center;
         justify-content: center;
         display: flex;
         margin: 50px;
-        color: #d6ccc2;
+        color: #75809c;
+        background-color: white;
     }
 
     .col-lg:hover {
-        box-shadow: 20px 20px 0 #75809c;
-        border: solid 5px #75809c;
-        transform: translateY(-5%);
-        color: #75809c;
+        box-shadow: 20px 10px 0 #d78f8f;
+        border: solid 10px #d78f8f;
+        transform: translateY(5%);
+        color: #d78f8f;
     }
 
     .div {
@@ -136,12 +141,14 @@
             opacity: 0;
             filter: blur(5px);
             scale: 0;
+            background-size: 0px;
         }
 
         100% {
             opacity: 1;
             filter: blur(0%);
             scale: 1;
+            background-size: cover;
         }
     }
     @keyframes start-c{
@@ -150,12 +157,13 @@
         }
         100%{
             scale: 2;
+            text-shadow:0 0 10px white;
         }
     }
 
     .start {
         color: white;
-        background-color: #8f959d;
+        background-color: #20273b;
         width: 100%;
         margin: 0;
         padding: 0;
@@ -169,6 +177,7 @@
         align-items: center;
         position: absolute;
         z-index: 10000;
+        
     }
 
     i.fa-home {
