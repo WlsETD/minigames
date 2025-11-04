@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale:1.0">
+    <title>錯誤題目練習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding: 0;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #eaeaea;
+        }
+
+        /* --- 新增：上傳介面樣式 --- */
+        #upload-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #file-uploader {
+            display: none; /* 隱藏預設的上傳按鈕 */
+        }
+
+        .upload-label {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .upload-label:hover {
+            background-color: #2980b9;
+        }
+        body.dark-mode .upload-label {
+             background-color: #64ffda;
+             color: #1a1a2e;
+        }
+        body.dark-mode .upload-label:hover {
+             background-color: #4dd0ba;
+        }
+        #upload-container p {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        body.dark-mode #upload-container p {
+            color: #a0a0a0;
+        }
+
+        /* ------------------------- */
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .container {
+            background-color: #16213e;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+            position: relative;
+        }
+
+        body.dark-mode header {
+            border-bottom-color: #2d3561;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode h1 {
+            color: #64ffda;
+        }
+
+        header p {
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode header p {
+            color: #a0a0a0;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .progress-bar {
+            background-color: #2d3561;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        body.dark-mode .progress {
+            background-color: #64ffda;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .question-number {
+            color: #a0a0a0;
+        }
+
+        .question-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .question-type-badge.multiple-choice {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        body.dark-mode .question-type-badge.multiple-choice {
+            background-color: #1a4d7a;
+            color: #64b5f6;
+        }
+
+        .question-type-badge.multi-select {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        body.dark-mode .question-type-badge.multi-select {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+
+        .question-type-badge.fill-in {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        body.dark-mode .question-type-badge.fill-in {
+            background-color: #4a148c;
+            color: #ce93d8;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .question-text {
+            color: #eaeaea;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+
+        body.dark-mode .option {
+            background-color: #0f3460;
+            border-color: #2d3561;
+            color: #eaeaea;
+        }
+
+        .option:hover {
+            background-color: #f8f9fa;
+            border-color: #bdc3c7;
+        }
+
+        body.dark-mode .option:hover {
+            background-color: #1a4d7a;
+            border-color: #64ffda;
+        }
+
+        .option.selected {
+            background-color: #e1f5fe;
+            border-color: #0288d1;
+        }
+
+        body.dark-mode .option.selected {
+            background-color: #1a4d7a;
+            border-color: #64ffda;
+        }
+
+        .option.correct {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        body.dark-mode .option.correct {
+            background-color: #1b5e20;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+
+        body.dark-mode .option.incorrect {
+            background-color: #b71c1c;
+            border-color: #f44336;
+        }
+
+        .fill-in-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background-color: white;
+            color: #333;
+        }
+
+        body.dark-mode .fill-in-input {
+            background-color: #0f3460;
+            border-color: #2d3561;
+            color: #eaeaea;
+        }
+
+        .fill-in-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        body.dark-mode .fill-in-input:focus {
+            border-color: #64ffda;
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+        }
+
+        .fill-in-input.correct {
+            border-color: #4caf50;
+            background-color: #e8f5e9;
+        }
+
+        body.dark-mode .fill-in-input.correct {
+            background-color: #1b5e20;
+            border-color: #4caf50;
+        }
+
+        .fill-in-input.incorrect {
+            border-color: #f44336;
+            background-color: #ffebee;
+        }
+
+        body.dark-mode .fill-in-input.incorrect {
+            background-color: #b71c1c;
+            border-color: #f44336;
+        }
+
+        .fill-in-hint {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        body.dark-mode .fill-in-hint {
+            color: #a0a0a0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        body.dark-mode .feedback.correct {
+            background-color: #1b5e20;
+            color: #4caf50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        body.dark-mode .feedback.incorrect {
+            background-color: #b71c1c;
+            color: #ef5350;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        #submit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        body.dark-mode #submit-btn {
+            background-color: #64ffda;
+            color: #1a1a2e;
+        }
+
+        body.dark-mode #submit-btn:hover {
+            background-color: #4dd0ba;
+        }
+
+        #submit-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        body.dark-mode #submit-btn:disabled {
+            background-color: #2d3561;
+            color: #666;
+        }
+
+        #next-btn {
+            background-color: #2ecc71;
+            color: white;
+            display: none;
+        }
+
+        #next-btn:hover {
+            background-color: #27ae60;
+        }
+
+        body.dark-mode #next-btn {
+            background-color: #4caf50;
+        }
+
+        body.dark-mode #next-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .stats {
+            color: #a0a0a0;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .score {
+            color: #64ffda;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .theme-toggle {
+                font-size: 20px;
+            }
+        }
+
+        @keyframes start {
+            0% {
+                scale: 1;
+            }
+
+            100% {
+                scale: 5;
+                opacity: 0;
+                display: none;
+            }
+        }
+
+        @keyframes ii {
+            0% {
+                opacity: 0;
+                transform: translateY(250%);
+                filter: blur(5px);
+                scale: 0;
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0%);
+                filter: blur(0%);
+                scale: 1;
+            }
+        }
+
+        .start {
+            color: white;
+            background-color: #16213e;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            animation: start 0.5s ease-in-out forwards;
+            animation-delay: 2.5s;
+            font-size: 7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 10000;
+        }
+
+        i.fa-book {
+            animation: ii 1s ease-out forwards;
+        }
+
+        .home-btn {
+            top: 0;
+            left: 0;
+            border-radius: 100%;
+            background-color: white;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: 0.3s;
+            color: #7d7d7d;
+        }
+
+        .home-btn:hover {
+            box-shadow: 0 0 10px white;
+            scale: 1.3;
+            border: 0;
+        }
+    </style>
+</head>
+<div class="start">
+    <i class="fa-solid fa-book"></i>
+</div>
+
+<body>
+    
+    <div id="upload-container">
+        <label for="file-uploader" class="upload-label">
+            <i class="fa-solid fa-upload"></i> 上傳錯誤題庫 (JSON 檔案)
+        </label>
+        <input type="file" id="file-uploader" accept=".json">
+        <p>請選擇您的 JSON 題庫檔案來開始練習</p>
+    </div>
+
+    <div class="container" id="quiz-container" style="display:none;">
+        <header>
+            <button class="theme-toggle" id="theme-toggle" aria-label="切換主題">🌙</button>
+            <a href="https://wlsetd.github.io/minigames/menu" class="home-btn"><i class="fa-solid fa-house"></i></a>
+            <h1>經濟學</h1>
+            <p>無限循環練習，鞏固商業知識</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="question-container">
+            <div class="question-number" id="question-number">載入中...</div>
+            <div class="question-text" id="question-text">正在載入題目，請稍候...</div>
+            <div class="options" id="options-container"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="controls">
+            <button id="submit-btn" disabled>提交答案</button>
+            <button id="next-btn">下一題</button>
+        </div>
+
+        <div class="stats">
+            <div>已練習: <span class="score" id="total-answered">0</span> 題</div>
+            <div>正確率: <span class="score" id="accuracy">0%</span></div>
+        </div>
+    </div>
+
+    <script>
+        // 全域變數，將由檔案上傳填入
+        let questions = [];
+
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let selectedOptions = new Set();
+        let fillInAnswer = "";
+        let totalAnswered = 0;
+        let correctAnswers = 0;
+
+        // DOM 元素
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackElement = document.getElementById('feedback');
+        const submitButton = document.getElementById('submit-btn');
+        const nextButton = document.getElementById('next-btn');
+        const progressElement = document.getElementById('progress');
+        const totalAnsweredElement = document.getElementById('total-answered');
+        const accuracyElement = document.getElementById('accuracy');
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // 新增：上傳相關 DOM 元素
+        const uploadContainer = document.getElementById('upload-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const fileUploader = document.getElementById('file-uploader');
+
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function shuffleQuestionOptions(question) {
+            if (question.type === "fill-in") {
+                return question;
+            }
+
+            if (question.type === "multiple-choice") {
+                const correctAnswerText = question.options[question.correctAnswer];
+                const indices = question.options.map((_, i) => i);
+                const shuffledIndices = shuffleArray(indices);
+                const shuffledOptions = shuffledIndices.map(i => question.options[i]);
+                const newCorrectAnswer = shuffledOptions.indexOf(correctAnswerText);
+
+                return {
+                    ...question,
+                    options: shuffledOptions,
+                    correctAnswer: newCorrectAnswer
+                };
+            }
+
+            if (question.type === "multi-select") {
+                const correctAnswerTexts = question.correctAnswer.map(idx => question.options[idx]);
+                const indices = question.options.map((_, i) => i);
+                const shuffledIndices = shuffleArray(indices);
+                const shuffledOptions = shuffledIndices.map(i => question.options[i]);
+                const newCorrectAnswers = correctAnswerTexts.map(text => shuffledOptions.indexOf(text));
+
+                return {
+                    ...question,
+                    options: shuffledOptions,
+                    correctAnswer: newCorrectAnswers
+                };
+            }
+
+            return question;
+        }
+        
+        // **修改：處理檔案上傳的函式**
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert("未選擇任何檔案。");
+                return;
+            }
+            // 雖然 accept=".json" 限制了，但最好還是檢查一下
+            if (!file.name.endsWith('.json') && file.type !== "application/json") {
+                alert("請僅上傳 .json 檔案。");
+                event.target.value = null; // 清空選擇
+                return;
+            }
+
+            const reader = new FileReader();
+
+            // *** 這是修改後的核心邏輯 ***
+            reader.onload = function(e) {
+                try {
+                    const fileContent = e.target.result;
+                    const loadedQuestions = JSON.parse(fileContent);
+                    
+                    if (!Array.isArray(loadedQuestions) || loadedQuestions.length === 0) {
+                        throw new Error("JSON 檔案格式錯誤或內容為空。");
+                    }
+                    
+                    // *** 成功讀取，開始轉換格式 ***
+                    questions = loadedQuestions.map(q => {
+                        const questionType = q["題目類型"];
+                        // 確保 "選項" 存在且為字串，否則給定空陣列
+                        const optionsArray = (typeof q["選項"] === 'string') 
+                            ? q["選項"].split(' / ').map(opt => opt.trim()) 
+                            : [];
+                        const correctText = q["正確答案"];
+                        
+                        let type, correctAnswer, acceptableAnswers;
+
+                        if (questionType === "單選題") {
+                            type = "multiple-choice";
+                            correctAnswer = optionsArray.indexOf(correctText);
+                            if (correctAnswer === -1) {
+                                console.warn(`找不到單選題答案: ${correctText}`, q);
+                                return null; // 忽略此題
+                            }
+                        } else if (questionType === "多選題") {
+                            type = "multi-select";
+                            const correctTexts = correctText.split(' / ').map(opt => opt.trim());
+                            correctAnswer = correctTexts.map(text => optionsArray.indexOf(text)).filter(idx => idx !== -1);
+                            
+                            if (correctAnswer.length !== correctTexts.length) {
+                                 console.warn(`部分多選題答案找不到: ${correctText}`, q);
+                            }
+                            if (correctAnswer.length === 0) {
+                                return null; // 忽略此題
+                            }
+                        } else if (questionType === "填充題") {
+                            type = "fill-in";
+                            // 支援多個正確答案，用 " / " 分隔
+                            acceptableAnswers = correctText.split(' / ').map(opt => opt.trim());
+                            correctAnswer = acceptableAnswers[0]; // 用第一個答案作為顯示的答案
+                        } else {
+                            console.warn(`無法識別的題目類型: ${questionType}`, q);
+                            return null; // 忽略此題
+                        }
+
+                        return {
+                            question: q["問題內容"],
+                            type: type,
+                            options: optionsArray,
+                            correctAnswer: correctAnswer, // 單選: index, 多選: [index1, index2], 填充: string (顯示用)
+                            acceptableAnswers: acceptableAnswers // 僅填充題用: [string1, string2]
+                        };
+                    }).filter(q => q !== null); // 過濾掉所有格式錯誤或被忽略的題目
+                    
+                    if (questions.length === 0) {
+                        throw new Error("JSON 檔案未包含任何有效題目。請檢查 JSON 格式。");
+                    }
+                    
+                    // 隱藏上傳介面，顯示測驗介面
+                    uploadContainer.style.display = 'none';
+                    quizContainer.style.display = 'block';
+                    
+                    // 開始測驗
+                    startQuiz(); 
+
+                } catch (error) {
+                    alert(`讀取檔案時發生錯誤: ${error.message}`);
+                    event.target.value = null; // 清空選擇
+                }
+            };
+            
+            reader.onerror = function() {
+                alert("讀取檔案時發生錯誤。");
+                event.target.value = null; // 清空選擇
+            };
+
+            reader.readAsText(file);
+        }
+
+        // **新增：開始測驗的函式**
+        // (此函式包含原 init() 中的測驗啟動邏輯)
+        function startQuiz() {
+            // 重置統計數據 (可選，如果希望每次上傳都重新計算)
+            currentQuestionIndex = 0;
+            totalAnswered = 0;
+            correctAnswers = 0;
+            
+            // 綁定按鈕事件
+            submitButton.addEventListener('click', checkAnswer);
+            nextButton.addEventListener('click', nextQuestion);
+
+            // 準備題目
+            shuffledQuestions = shuffleArray([...questions]);
+            shuffledQuestions = shuffledQuestions.map(q => shuffleQuestionOptions(q));
+            
+            displayQuestion();
+            updateStats();
+        }
+
+        // **修改：init() 函式**
+        // 現在 init 只負責主題和檔案上傳的監聽
+        function init() {
+            loadTheme();
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // 監聽檔案上傳事件
+            fileUploader.addEventListener('change', handleFileUpload);
+        }
+
+        function displayQuestion() {
+            if (shuffledQuestions.length === 0) {
+                 questionTextElement.textContent = "沒有可顯示的題目。";
+                 return;
+            }
+
+            const question = shuffledQuestions[currentQuestionIndex];
+
+            let typeBadge;
+            if (question.type === "multiple-choice") {
+                typeBadge = '<span class="question-type-badge multiple-choice">單選題</span>';
+            } else if (question.type === "multi-select") {
+                typeBadge = '<span class="question-type-badge multi-select">多選題</span>';
+            } else {
+                typeBadge = '<span class="question-type-badge fill-in">填充題</span>';
+            }
+
+            questionNumberElement.innerHTML = `題目 ${currentQuestionIndex + 1}/${shuffledQuestions.length} ${typeBadge}`;
+            questionTextElement.textContent = question.question;
+            progressElement.style.width = `${((currentQuestionIndex + 1) / shuffledQuestions.length) * 100}%`;
+
+            optionsContainer.innerHTML = '';
+            selectedOptions.clear();
+
+            if (question.type === "multiple-choice") {
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    const optionLabel = String.fromCharCode(65 + index); // 轉換為 A, B, C, D...
+                    optionElement.className = 'option';
+                    optionElement.textContent = `[${optionLabel}] ${option}`;
+                    optionElement.dataset.index = index;
+
+                    optionElement.addEventListener('click', () => {
+                        if (submitButton.style.display === 'none') return;
+
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+
+                        optionElement.classList.add('selected');
+                        selectedOption = index;
+                        submitButton.disabled = false;
+                    });
+
+                    optionsContainer.appendChild(optionElement);
+                });
+            } else if (question.type === "multi-select") {
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    const optionLabel = String.fromCharCode(65 + index); // 轉換為 A, B, C, D...
+                    optionElement.className = 'option';
+                    optionElement.textContent = `[${optionLabel}] ${option}`;
+                    optionElement.dataset.index = index;
+
+                    optionElement.addEventListener('click', () => {
+                        if (submitButton.style.display === 'none') return;
+
+                        if (selectedOptions.has(index)) {
+                            selectedOptions.delete(index);
+                            optionElement.classList.remove('selected');
+                        } else {
+                            selectedOptions.add(index);
+                            optionElement.classList.add('selected');
+                        }
+
+                        submitButton.disabled = selectedOptions.size === 0;
+                    });
+
+                    optionsContainer.appendChild(optionElement);
+                });
+            } else { // 假設為 "fill-in"
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.className = 'fill-in-input';
+                inputElement.placeholder = '請輸入答案...';
+                inputElement.id = 'fill-in-input';
+
+                inputElement.addEventListener('input', (e) => {
+                    fillInAnswer = e.target.value.trim();
+                    submitButton.disabled = fillInAnswer.length === 0;
+                });
+
+                inputElement.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && fillInAnswer.length > 0) {
+                        checkAnswer();
+                    }
+                });
+
+                optionsContainer.appendChild(inputElement);
+
+                const hintElement = document.createElement('div');
+                hintElement.className = 'fill-in-hint';
+                hintElement.textContent = '💡 提示：輸入完成後按 Enter 或點擊提交按鈕';
+                optionsContainer.appendChild(hintElement);
+
+                setTimeout(() => inputElement.focus(), 100);
+            }
+
+            feedbackElement.className = 'feedback';
+            feedbackElement.textContent = '';
+            submitButton.style.display = 'block';
+            nextButton.style.display = 'none';
+            submitButton.disabled = true;
+            selectedOption = null;
+            fillInAnswer = "";
+        }
+
+        function checkAnswer() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            let isCorrect = false;
+
+            if (question.type === "multiple-choice") {
+                if (selectedOption === null) return;
+                isCorrect = selectedOption === question.correctAnswer;
+            } else if (question.type === "multi-select") {
+                if (selectedOptions.size === 0) return;
+                const correctSet = new Set(question.correctAnswer);
+                isCorrect = selectedOptions.size === correctSet.size &&
+                    [...selectedOptions].every(idx => correctSet.has(idx));
+            } else { // 假設為 "fill-in"
+                if (fillInAnswer.length === 0) return;
+                const normalizedAnswer = fillInAnswer.toLowerCase().replace(/\s+/g, '');
+                // **重要**：填充題需要 'acceptableAnswers' 陣列
+                isCorrect = question.acceptableAnswers && question.acceptableAnswers.some(answer =>
+                    answer.toLowerCase().replace(/\s+/g, '') === normalizedAnswer
+                );
+            }
+
+            totalAnswered++;
+            if (isCorrect) correctAnswers++;
+            updateStats();
+
+            if (isCorrect) {
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.textContent = '✓ 回答正確！';
+            } else {
+                feedbackElement.className = 'feedback incorrect';
+                if (question.type === "multiple-choice") {
+                    const correctOptionLabel = String.fromCharCode(65 + question.correctAnswer);
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：[${correctOptionLabel}] ${question.options[question.correctAnswer]}`;
+                } else if (question.type === "multi-select") {
+                    const correctAnswersText = question.correctAnswer.map(idx => `[${String.fromCharCode(65 + idx)}] ${question.options[idx]}`).join('、');
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${correctAnswersText}`;
+                } else { // 假設為 "fill-in"
+                    // **重要**：填充題需要 'correctAnswer' (字串) 來顯示答案
+                    feedbackElement.textContent = `✗ 回答錯誤。正確答案是：${question.correctAnswer || (question.acceptableAnswers ? question.acceptableAnswers[0] : 'N/A')}`;
+                }
+            }
+
+            if (question.type === "multiple-choice") {
+                document.querySelectorAll('.option').forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+                    if (parseInt(option.dataset.index) === question.correctAnswer) {
+                        option.classList.add('correct');
+                        option.classList.remove('selected');
+                    } else if (parseInt(option.dataset.index) === selectedOption && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            } else if (question.type === "multi-select") {
+                const correctSet = new Set(question.correctAnswer);
+                document.querySelectorAll('.option').forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+                    const optionIndex = parseInt(option.dataset.index);
+
+                    if (correctSet.has(optionIndex)) {
+                        option.classList.add('correct');
+                        option.classList.remove('selected');
+                    } else if (selectedOptions.has(optionIndex)) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            } else { // 假設為 "fill-in"
+                const inputElement = document.getElementById('fill-in-input');
+                if (inputElement) {
+                    inputElement.disabled = true;
+                    inputElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            }
+
+            submitButton.style.display = 'none';
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1);
+
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                currentQuestionIndex = 0;
+                // 重新洗牌所有題目，達成「無限循環練習」
+                shuffledQuestions = shuffleArray([...questions]);
+                shuffledQuestions = shuffledQuestions.map(q => shuffleQuestionOptions(q));
+            }
+
+            displayQuestion();
+        }
+
+        function updateStats() {
+            totalAnsweredElement.textContent = totalAnswered;
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            accuracyElement.textContent = `${accuracy}%`;
+        }
+
+        // 頁面載入時，啟動 init 函式
+        window.onload = init;
+    </script>
+</body>
+
+</html>
