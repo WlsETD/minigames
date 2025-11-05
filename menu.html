@@ -17,64 +17,112 @@
         </div>
     </div>
     <section>
-        <div class="row w-100">
-            <a class="col-lg" href="https://wlsetd.github.io/minigames/eco">
-                <div class="div">
-                    <i class="fa-solid fa-book p"></i>
-                    <h1 class="text-center mt-4">經濟學</h1>
-                </div>RT
-            </a>
-            <a class="col-lg" href="https://wlsetd.github.io/minigames/eng">
-                <div class="div">
-                    <i class="fa-solid fa-a p"></i>
-                    <h1 class="text-center mt-4">英文填充</h1>
-                </div>
-            </a>
-            <a class="col-lg" href="https://wlsetd.github.io/minigames/test">
-                <div class="div">
-                    <i class="fa-solid fa-money-bill-trend-up p"></i>
-                    <h1 class="text-center mt-4">商業導論選擇</h1>
-                </div>
-            </a>
-        </div>
-        <div class="row w-100 mt-3">
+        <div class="container-fluid">
+            <div class="row w-100">
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-a"></i></div>
 
-            <a class="col-lg" href="https://wlsetd.github.io/minigames/engs">
-                <div class="div">
-                    <i class="fa-solid fa-book p"></i>
-                    <h1 class="text-center mt-4">英文選擇</h1>
+                        <h1 class="text-center mt-4 mb-4">英文選擇</h1>
+                        <a href="https://wlsetd.github.io/minigames/engs" class="btn btn-b w-100"><i
+                                class="fa-solid fa-play "></i></a>
+                    </div>
                 </div>
-            </a>
-            <a class="col-lg" href="https://wlsetd.github.io/minigames/wrong">
-                <div class="div">
-                    <i class="fa-solid p fa-x"></i>
-                    <h1 class="text-center mt-4">錯誤題目練習</h1>
-                    <h5 class="text-center">僅限電腦版</h5>
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-a"></i></div>
+
+                        <h1 class="text-center mt-4 mb-4">英文填充</h1>
+                        <a href="https://wlsetd.github.io/minigames/eng" class="btn btn-b w-100"><i
+                                class="fa-solid fa-play "></i></a>
+                    </div>
                 </div>
-            </a>
-            <div class="col-lg" href="">
-                <div class="div">
-                    <i class="fa-solid p fa-wrench"></i>
-                    <h1 class="text-center mt-4">敬請期待</h1>
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-book"></i></div>
+
+                        <h1 class="text-center mt-4 mb-4">經濟學</h1>
+                        <a href="https://wlsetd.github.io/minigames/eco" class="btn btn-b w-100"><i
+                                class="fa-solid fa-play "></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row w-100 mt-2">
+
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-money-bill"></i></div>
+
+                        <h1 class="text-center mt-4 mb-4">商業導論</h1>
+                        <a href="https://wlsetd.github.io/minigames/test" class="btn btn-b w-100"><i
+                                class="fa-solid fa-play "></i></a>
+                    </div>
+                </div>
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-x"></i></div>
+
+                        <h1 class="text-center mt-4 mb-4">錯誤題目練習</h1>
+                        <a href="https://wlsetd.github.io/minigames/wrong" class="btn btn-b w-100"><i class="fa-solid fa-play "></i></a>
+                    </div>
+                </div>
+                <div class="col-lg">
+                    <div class="card px-5" style="width: 30rem;">
+                        <div class="card-img-top w-100 text-center p mt-2"><i class="fa-solid fa-computer"></i></div>
+
+                        <h1 class="text-center mt-4 mb-4">計算機概論</h1>
+                        <a href="https://wlsetd.github.io/minigames/com" class="btn btn-b w-100"><i class="fa-solid fa-play "></i></a>
+                    </div>
                 </div>
             </div>
 
     </section>
 </body>
 <style>
+    .card {
+        box-shadow: 20px 20px 0 #75809c;
+        border-radius: 40px;
+        border: solid 10px #75809c;
+        transition: 0.5s;
+        color: #75809c;
+        background-color: white;
+        margin: 20px;
+        height: 30vh;
+    }
+
+    .card:hover {
+        box-shadow: 20px 10px 0 #d78f8f;
+        border: solid 10px #d78f8f;
+        transform: translateY(5%);
+        color: #d78f8f;
+    }
+
+    .card:hover .btn-b {
+        background: #d78f8f;
+        text-shadow: 0 0 10px #FFF;
+        color: white;
+    }
+
+    .btn-b {
+        background-color: #75809c;
+        color: white;
+        border-radius: 30px;
+    }
+
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
         font-weight: bolder;
-        
-        
+
+
 
     }
 
     h1,
     h5,
+    h2,
     i {
         font-weight: bolder;
     }
@@ -93,7 +141,7 @@
     }
 
     .p {
-        font-size: 5rem;
+        font-size: 8rem;
         width: 100%;
         text-align: center;
     }
@@ -104,6 +152,9 @@
         margin: 0 auto;
         overflow-x: hidden;
         padding-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
     }
 
@@ -112,32 +163,9 @@
     }
 
     .col-lg {
-        box-shadow: 20px 20px 0 #75809c;
-        height: 30vh;
-        border-radius: 40px;
-        border: solid 10px #75809c;
-        transition: 0.5s;
-        align-items: center;
-        justify-content: center;
         display: flex;
-        margin: 50px;
-        color: #75809c;
-        background-color: white;
-    }
-
-    .col-lg:hover {
-        box-shadow: 20px 10px 0 #d78f8f;
-        border: solid 10px #d78f8f;
-        transform: translateY(5%);
-        color: #d78f8f;
-    }
-
-    .div {
-        transition: 0.3s;
-    }
-
-    .col-lg:hover>.div {
-        scale: 1.1;
+        justify-content: center;
+        align-items: center;
     }
 
     @media (max-width:1500px) {
@@ -158,7 +186,7 @@
 
     @keyframes sc {
         0% {
-           overflow-y: hidden;
+            overflow-y: hidden;
         }
 
         100% {
@@ -172,8 +200,7 @@
         }
 
         100% {
-            scale: 1.0
-            ;
+            scale: 1.05;
             opacity: 0;
             display: none;
         }
@@ -201,7 +228,7 @@
         }
 
         100% {
-            scale: 1;
+            scale: 2;
             text-shadow: 0 0 10px white;
         }
     }
@@ -237,4 +264,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>
-
