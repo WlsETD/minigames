@@ -813,6 +813,21 @@ class CashCard {
 </script>
 
 <script>
+    const ua = navigator.userAgent.toLowerCase();
+const isInApp =
+  ua.includes('line') ||
+  ua.includes('fbav') ||
+  ua.includes('instagram') ||
+  ua.includes('messenger') ||
+  ua.includes('wv');
+
+if (isInApp) {
+  alert(
+    '⚠️ 請使用 Safari 或 Chrome 開啟此網站\n' +
+    'LINE / IG / FB 內建瀏覽器無法正常執行論壇功能'
+  );
+}
+
   Prism.plugins.autoloader.languages_path = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/";
 
   const DB_NAME = "devslite_forum_db";
