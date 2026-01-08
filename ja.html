@@ -701,57 +701,55 @@ public class P04 {
 </script>
 
 <script type="text/plain" id="seed-p05">
-import java.util.*;
+import java.util.Scanner;
 
 public class P05 {
 
-    static class Student {
+    static class st {
         int id;
         String name;
-        int mid;
-        int fin;
         double avg;
-
-        Student(int id, String name, int mid, int fin) {
-            this.id = id;
-            this.name = name;
-            this.mid = mid;
-            this.fin = fin;
-            this.avg = (mid + fin) / 2.0;
-        }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
         int n = sc.nextInt();
-        List<Student> list = new ArrayList<>();
+
+        st[] s = new st[n];
 
         for (int i = 0; i < n; i++) {
-            int id = sc.nextInt();
-            String name = sc.next();
+            s[i] = new st();
+            s[i].id = sc.nextInt();
+            s[i].name = sc.next();
             int mid = sc.nextInt();
             int fin = sc.nextInt();
-            list.add(new Student(id, name, mid, fin));
+            s[i].avg = (mid + fin) / 2.0;
         }
 
-        // 🔹 依學號排序
-        List<Student> byId = new ArrayList<>(list);
-        byId.sort(Comparator.comparingInt(s -> s.id));
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - 1; j++)
+                if (s[j].id > s[j + 1].id) {
+                    st t = s[j];
+                    s[j] = s[j + 1];
+                    s[j + 1] = t;
+                }
 
-        for (Student s : byId) {
-            System.out.printf("%d-%s:%.1f%n", s.id, s.name, s.avg);
-        }
+        for (int i = 0; i < n; i++)
+            System.out.printf("%d-%s:%.1f%n", s[i].id, s[i].name, s[i].avg);
 
-        // 🔹 依總成績排序（由高到低）
-        List<Student> byScore = new ArrayList<>(byId);
-        byScore.sort((a, b) -> Double.compare(b.avg, a.avg));
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - 1; j++)
+                if (s[j].avg < s[j + 1].avg) {
+                    st t = s[j];
+                    s[j] = s[j + 1];
+                    s[j + 1] = t;
+                }
 
-        for (Student s : byScore) {
-            System.out.printf("%d-%s:%.1f%n", s.id, s.name, s.avg);
-        }
+        for (int i = 0; i < n; i++)
+            System.out.printf("%d-%s:%.1f%n", s[i].id, s[i].name, s[i].avg);
     }
 }
+
 </script>
 
 <script type="text/plain" id="seed-cashcard">
