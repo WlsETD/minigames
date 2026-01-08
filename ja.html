@@ -1,0 +1,1448 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DevsLite - 寫程式討論區 (Vue3 + IndexedDB)</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --panel:#ffffff;
+      --line:#dfe6ee;
+      --text:#1f2a37;
+      --muted:#6b7280;
+      --brand:#1d4ed8;
+      --brand2:#2563eb;
+      --danger:#dc2626;
+      --warn:#b45309;
+      --ok:#047857;
+
+      --shadow: 0 10px 24px rgba(0,0,0,.06);
+      --r:10px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea,select{font-family:inherit}
+    .container{max-width:1220px;margin:0 auto;padding:18px 16px 36px}
+
+    /* NAV */
+    .nav{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,255,255,.92);
+      border-bottom:1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .nav-inner{max-width:1220px;margin:0 auto;padding:10px 16px;display:flex;gap:12px;align-items:center}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--brand2)}
+    .brand b{color:#111827}
+    .nav-links{display:flex;gap:10px;align-items:center;color:#374151;font-weight:650}
+    .nav-links a{padding:8px 10px;border-radius:8px}
+    .nav-links a:hover{background:#f3f4f6}
+    .spacer{flex:1}
+    .search{
+      display:flex;align-items:center;gap:8px;
+      border:1px solid var(--line);
+      background:#fff;border-radius:999px;
+      padding:8px 12px;
+      min-width: 280px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+    }
+    .search input{border:0;outline:0;width:100%;font-size:14px}
+    .chip{
+      border:1px solid var(--line);
+      background:#fff;border-radius:999px;
+      padding:8px 12px;
+      cursor:pointer;font-weight:750;font-size:13px;
+    }
+    .chip.primary{border-color:#c7d2fe;background:#eef2ff;color:#1e3a8a}
+    .chip.danger{border-color:#fecaca;background:#fff1f2;color:#9f1239}
+    .me{display:flex;gap:10px;align-items:center;position:relative}
+    .avatar{
+      width:34px;height:34px;border-radius:999px;
+      display:grid;place-items:center;
+      background:#eef2ff;border:1px solid #c7d2fe;
+      font-weight:900;color:#1e3a8a;
+      cursor:pointer;
+    }
+    .dropdown{
+      position:absolute;right:0;top:44px;width:240px;
+      background:#fff;border:1px solid var(--line);
+      border-radius:12px;box-shadow:var(--shadow);
+      padding:8px;
+    }
+    .drop-item{
+      padding:10px;border-radius:10px;
+      display:flex;justify-content:space-between;align-items:center;
+      cursor:pointer;font-weight:700;
+    }
+    .drop-item:hover{background:#f3f4f6}
+    .badge{
+      font-size:12px;font-weight:800;
+      padding:4px 8px;border-radius:999px;
+      border:1px solid var(--line);
+      background:#f9fafb;color:#374151;
+    }
+    .badge.blue{border-color:#c7d2fe;background:#eef2ff;color:#1e3a8a}
+    .badge.green{border-color:#bbf7d0;background:#ecfdf5;color:#065f46}
+    .badge.orange{border-color:#fed7aa;background:#fff7ed;color:#9a3412}
+
+    /* Top notice + info */
+    .notice{
+      background:#fee2e2;border:1px solid #fecaca;color:#7f1d1d;
+      padding:10px 12px;border-radius:10px;
+      display:flex;gap:10px;align-items:center;
+      margin-top:14px;
+      display: none;
+    }
+    .notice b{font-weight:900}
+    .info{
+      background:#dbeafe;border:1px solid #bfdbfe;color:#1e3a8a;
+      padding:12px;border-radius:10px;
+      margin-top:12px;
+      display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+      display: none;
+    }
+    .info .pill{width:10px;height:10px;border-radius:999px;background:var(--brand2)}
+    .muted{color:var(--muted)}
+    .layout{
+      display:grid;grid-template-columns: 260px 1fr 300px;gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 1020px){
+      .layout{grid-template-columns: 1fr}
+      .search{min-width:0;flex:1}
+      .nav-links{display:none}
+    }
+
+    /* Panels */
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:12px;
+      box-shadow: var(--shadow);
+    }
+    .panel .head{
+      padding:12px;border-bottom:1px solid var(--line);
+      font-weight:900;color:#111827;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .panel .body{padding:12px}
+    .small{font-size:12.5px}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+
+    /* Post list */
+    .post{
+      padding:12px;border:1px solid var(--line);
+      border-radius:12px;background:#fff;
+      cursor:pointer;
+    }
+    .post:hover{background:#fbfdff}
+    .post .row1{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+    .post h3{margin:0;font-size:16px;line-height:1.3}
+    .post .meta{margin-top:8px;color:var(--muted);font-size:12.5px;display:flex;gap:10px;flex-wrap:wrap}
+    .excerpt{margin-top:10px;color:#374151;font-size:13.5px;line-height:1.55}
+    .list{display:flex;flex-direction:column;gap:10px}
+
+    /* Thread */
+    .thread-title{margin:0;font-size:20px}
+    .thread-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;border-radius:10px;
+      padding:9px 12px;font-weight:850;
+      cursor:pointer;
+    }
+    .btn:hover{background:#f3f4f6}
+    .btn.primary{border-color:#c7d2fe;background:#eef2ff;color:#1e3a8a}
+    .btn.danger{border-color:#fecaca;background:#fff1f2;color:#9f1239}
+    .btn.block{width:100%}
+    .field{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .field label{font-size:12.5px;color:var(--muted);font-weight:800}
+    .input,.textarea,.select{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:14px;outline:0;background:#fff;
+    }
+    .textarea{min-height:120px;resize:vertical;line-height:1.6}
+    .two{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    @media (max-width: 700px){ .two{grid-template-columns: 1fr} }
+
+    .img-grid{display:grid;grid-template-columns: repeat(2, 1fr);gap:10px;margin-top:12px}
+    @media (max-width: 700px){ .img-grid{grid-template-columns: 1fr} }
+    .img{
+      border:1px solid var(--line);
+      border-radius:12px;overflow:hidden;background:#fff;
+    }
+    .img img{width:100%;height:auto;display:block}
+
+    /* Code box */
+    .codebox{
+      margin-top:12px;border:1px solid var(--line);
+      border-radius:12px;overflow:hidden;background:#f8fafc;
+    }
+    .code-top{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:10px 12px;border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .code-top .left{display:flex;gap:8px;align-items:center}
+    .mini{
+      border:1px solid var(--line);background:#fff;border-radius:999px;
+      padding:7px 10px;cursor:pointer;font-weight:850;font-size:12px;
+    }
+    .mini:hover{background:#f3f4f6}
+    pre{margin:0}
+    pre code{font-family:var(--mono);font-size:13px}
+
+    /* Comments */
+    .comment{
+      border:0;
+      border-radius:12px;padding:12px;background:transparent;margin-top:10px;
+      color: #047857;
+    }
+    .comment .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .comment .meta{font-size:12.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+    .comment .body{margin-top:8px;white-space:pre-wrap;line-height:1.7;color:#374151}
+
+    /* Left / Right lists */
+    .user-row, .reply-row{
+      display:flex;gap:10px;align-items:center;
+      padding:9px;border-radius:10px;cursor:pointer;
+    }
+    .user-row:hover, .reply-row:hover{background:#f3f4f6}
+    .uava{
+      width:34px;height:34px;border-radius:999px;
+      display:grid;place-items:center;font-weight:900;
+      background:#f3f4f6;border:1px solid var(--line);color:#111827;
+      flex:0 0 auto;
+    }
+    .reply-row .t{font-weight:900;font-size:13.5px;line-height:1.2}
+    .reply-row .s{font-size:12.5px;color:var(--muted);margin-top:4px}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:#111827;color:#fff;
+      padding:10px 12px;border-radius:999px;
+      font-weight:850;font-size:13px;
+      box-shadow: 0 14px 26px rgba(0,0,0,.16);
+      max-width: 92vw;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    /* Auth modal */
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:flex;align-items:center;justify-content:center;padding:16px}
+    .modal{width:520px;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+    .modal .mhead{padding:12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:950}
+    .x{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:900}
+    .x:hover{background:#f3f4f6}
+    .tabs{display:flex;gap:10px}
+    .tab{flex:1;text-align:center;padding:10px;border:1px solid var(--line);border-radius:10px;font-weight:950;cursor:pointer;background:#fff}
+    .tab.active{border-color:#c7d2fe;background:#eef2ff;color:#1e3a8a}
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner" @click="menuOpen=false">
+      <a class="brand" href="#" @click.prevent="goHome()">
+        <span class="dot"></span>
+        <b>DevsLite</b> <span class="muted small">寫程式討論區</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#" @click.prevent="goHome()">全部貼文</a>
+        <a href="#" @click.prevent="filterMode='original'; goHome()">原創發表</a>
+        <a href="#" @click.prevent="filterMode='series'; goHome()">系列文章</a>
+        <a href="#" @click.prevent="panel='contributors'; goHome()">貢獻者</a>
+        <a href="#" @click.prevent="panel='community'; goHome()">社群</a>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="search" @click.stop>
+        <span class="muted" style="font-weight:900">搜尋文章</span>
+        <input v-model.trim="q" placeholder="標題 / 內容 / 作者 / 標籤" />
+      </div>
+
+      <button class="chip primary" @click.stop="goNew()">發表文章</button>
+
+      <div class="me" @click.stop>
+        <template v-if="me">
+          <div class="avatar" @click="toggleMenu()">{{ me.username.slice(0,1).toUpperCase() }}</div>
+          <div class="chip" @click="toggleMenu()">{{ me.username }}</div>
+          <div class="dropdown" v-if="menuOpen">
+            <div class="drop-item">
+              <span>狀態</span><span class="badge green">Online</span>
+            </div>
+            <div class="drop-item" @click="goNew(); menuOpen=false">
+              <span>新增貼文</span><span class="muted">Ctrl+K</span>
+            </div>
+            <div class="drop-item" @click="logout()">
+              <span style="color:#9f1239;font-weight:950">登出</span><span class="muted">⎋</span>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <button class="chip" @click="openAuth()">登入</button>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- NOTICE + INFO (仿 Devs.tw) -->
+    <div class="notice">
+      <b>📣</b>
+      <div>
+        本站為 Vue3 + IndexedDB 的論壇 Demo：支援登入/留言/複製程式碼/圖片。你之後丟「第二份資料」我可以直接把 seed 文章再加進來。
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="pill"></div>
+      <div style="font-weight:900">DevsLite</div>
+      <div class="muted">是讓你整理題目、寫解法、貼圖與討論的本機論壇（重整資料不會消失）。</div>
+      <div class="spacer"></div>
+      <div class="badge blue">Vue 3</div>
+      <div class="badge blue">IndexedDB</div>
+      <div class="badge orange">Demo</div>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="head">
+          <span>近期活躍用戶</span>
+          <span class="badge">{{ activeUsers.length }}</span>
+        </div>
+        <div class="body">
+          <div class="user-row" v-for="u in activeUsers" :key="u.id">
+            <div class="uava">{{ u.username.slice(0,1).toUpperCase() }}</div>
+            <div style="min-width:0">
+              <div style="font-weight:900">{{ u.username }}</div>
+              <div class="muted small">最近發文/留言活躍</div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <button class="btn block" @click="seedDemo()">重置預設文章</button>
+          <button class="btn block" style="margin-top:8px" @click="wipeAll()">清空資料庫（慎用）</button>
+        </div>
+      </div>
+
+      <!-- CENTER -->
+      <div class="panel">
+        <div class="head">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <span v-if="route==='home'">貼文列表</span>
+            <span v-else-if="route==='post'">貼文內容</span>
+            <span v-else>發表文章</span>
+            <span class="badge blue" v-if="route==='home'">{{ filteredPosts.length }} 篇</span>
+          </div>
+          <div class="thread-actions">
+            <button class="btn" v-if="route!=='home'" @click="goHome()">回列表</button>
+            <button class="btn primary" v-if="route==='home'" @click="goNew()">＋ 發表</button>
+          </div>
+        </div>
+
+        <div class="body">
+          <!-- HOME -->
+          <div v-if="route==='home'" class="list">
+            <div class="post" v-for="p in filteredPosts" :key="p.id" @click="openPost(p.id)">
+              <div class="row1">
+                <div style="min-width:0">
+                  <h3>{{ p.title }}</h3>
+                  <div class="meta">
+                    <span>作者：<b>{{ p.authorName }}</b></span>
+                    <span>時間：{{ fmt(p.createdAt) }}</span>
+                    <span class="badge" v-if="p.tags?.length">{{ p.tags.join(' / ') }}</span>
+                    <span class="badge orange" v-if="p.images?.length">📷 {{ p.images.length }}</span>
+                    <span class="badge blue" v-if="p.code">{"</>"} Code</span>
+                    <span class="muted">留言：{{ commentCount[p.id] || 0 }}</span>
+                  </div>
+                  <div class="excerpt">{{ p.body }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="filteredPosts.length===0" class="muted">
+              沒有符合的文章。你可以改搜尋關鍵字或直接發文。
+            </div>
+          </div>
+
+          <!-- POST -->
+          <div v-else-if="route==='post' && activePost">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start">
+              <div>
+                <h2 class="thread-title">{{ activePost.title }}</h2>
+                <div class="meta" style="margin-top:8px">
+                  <span>作者：<b>{{ activePost.authorName }}</b></span>
+                  <span>時間：{{ fmt(activePost.createdAt) }}</span>
+                  <span class="badge" v-if="activePost.tags?.length">{{ activePost.tags.join(' / ') }}</span>
+                  <span class="badge blue" v-if="activePost.language">Lang: {{ activePost.language }}</span>
+                </div>
+              </div>
+
+              <div class="thread-actions">
+                <button class="btn" @click="goHome()">← 回列表</button>
+                <button class="btn" v-if="activePost.code" @click="copyText(activePost.code)">複製程式碼</button>
+                <button class="btn danger" v-if="me && me.id===activePost.authorId" @click="deletePost(activePost.id)">刪除貼文</button>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div style="white-space:pre-wrap;line-height:1.8;color:#374151">{{ activePost.body }}</div>
+
+            <div class="img-grid" v-if="activePost.images?.length">
+              <div class="img" v-for="(src,i) in activePost.images" :key="i">
+                <img :src="src" alt="post image" />
+              </div>
+            </div>
+
+            <div class="codebox" v-if="activePost.code">
+              <div class="code-top">
+                <div class="left">
+                  <span class="badge blue">程式碼</span>
+                  <span class="muted small">{{ activePost.language || 'text' }}</span>
+                </div>
+                <button class="mini" @click="copyText(activePost.code)">一鍵複製</button>
+              </div>
+              <pre><code :class="'language-'+(activePost.language || 'clike')">{{ activePost.code }}</code></pre>
+            </div>
+
+            <div class="hr"></div>
+
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+              <div style="font-weight:950">留言（{{ comments.length }}）</div>
+              <div class="badge orange" v-if="!me">登入後才能留言</div>
+            </div>
+
+            <div v-if="me" class="field">
+              <label>新增留言</label>
+              <textarea class="textarea" v-model.trim="commentDraft" placeholder="輸入留言內容..."></textarea>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn" @click="commentDraft=''">清空</button>
+                <button class="btn primary" @click="addComment()">送出留言</button>
+              </div>
+            </div>
+
+            <div v-for="c in comments" :key="c.id" class="comment">
+              <div class="top">
+                <div class="meta">
+                  <span>作者：<b>{{ c.authorName }}</b></span>
+                  <span>時間：{{ fmt(c.createdAt) }}</span>
+                </div>
+                <button class="mini" v-if="me && me.id===c.authorId" @click="deleteComment(c.id)">刪除</button>
+              </div>
+              <div class="body">{{ c.body }}</div>
+            </div>
+          </div>
+
+          <!-- NEW POST -->
+          <div v-else>
+            <div v-if="!me" class="muted">
+              需要登入才能發文。<button class="btn primary" style="margin-left:8px" @click="openAuth()">前往登入</button>
+            </div>
+
+            <template v-else>
+              <div class="field">
+                <label>標題</label>
+                <input class="input" v-model.trim="draft.title" maxlength="80" placeholder="例如：矩陣相乘(App04) 卡關" />
+              </div>
+
+              <div class="two">
+                <div class="field">
+                  <label>標籤（用逗號分隔）</label>
+                  <input class="input" v-model.trim="draft.tags" placeholder="Java, 資料結構, 迴圈" />
+                </div>
+                <div class="field">
+                  <label>程式語言</label>
+                  <select class="select" v-model="draft.language">
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="cpp">C++</option>
+                    <option value="sql">SQL</option>
+                    <option value="text">純文字</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>內文</label>
+                <textarea class="textarea" v-model.trim="draft.body" placeholder="描述題目、你的想法、或你希望別人怎麼幫你..."></textarea>
+              </div>
+
+              <div class="two">
+                <div class="field">
+                  <label>圖片網址（可留空）</label>
+                  <input class="input" v-model.trim="draft.imageUrl" placeholder="https://..." />
+                  <div class="muted small">如果你要像預設文章那樣直接引用本地檔名，也可以填：1.jpg</div>
+                </div>
+                <div class="field">
+                  <label>上傳圖片（存進 IndexedDB）</label>
+                  <input class="input" type="file" accept="image/*" @change="onPickImage" />
+                  <div class="muted small">上傳後會轉為 DataURL；請避免太大檔。</div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>程式碼（可留空）</label>
+                <textarea class="textarea" v-model="draft.code" placeholder="貼上你的 code..."></textarea>
+              </div>
+
+              <div v-if="draft.previewImages.length" class="img-grid">
+                <div class="img" v-for="(src,i) in draft.previewImages" :key="i">
+                  <img :src="src" alt="preview" />
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+                <button class="btn" @click="resetDraft()">清空</button>
+                <button class="btn primary" @click="publish()">發表</button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="panel">
+        <div class="head">
+          <span>討論區最新留言</span>
+          <span class="badge">{{ latestReplies.length }}</span>
+        </div>
+        <div class="body">
+          <div class="reply-row" v-for="r in latestReplies" :key="r.id" @click="openPost(r.postId)">
+            <div class="uava">{{ r.authorName.slice(0,1).toUpperCase() }}</div>
+            <div style="min-width:0">
+              <div class="t">{{ r.postTitle }}</div>
+              <div class="s">{{ r.authorName }}：{{ r.body }}</div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="muted small">
+            小提醒：這是本機論壇 Demo。若你之後要「多人同步、真正資料庫」，我可以幫你改成 Laravel + MySQL + Vue3 API 版本。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" v-if="toast">{{ toast }}</div>
+
+  <!-- AUTH MODAL -->
+  <div class="backdrop" v-if="authOpen" @click.self="authOpen=false">
+    <div class="modal">
+      <div class="mhead">
+        <div>登入 / 註冊</div>
+        <button class="x" @click="authOpen=false">關閉</button>
+      </div>
+      <div style="padding:12px">
+        <div class="tabs">
+          <div class="tab" :class="{active:authTab==='login'}" @click="authTab='login'">登入</div>
+          <div class="tab" :class="{active:authTab==='register'}" @click="authTab='register'">註冊</div>
+        </div>
+
+        <div class="field">
+          <label>使用者名稱</label>
+          <input class="input" v-model.trim="auth.username" maxlength="24" placeholder="例如：frank" />
+        </div>
+        <div class="field">
+          <label>密碼</label>
+          <input class="input" type="password" v-model="auth.password" placeholder="至少 4 碼（Demo）" />
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn primary" v-if="authTab==='login'" @click="login()">登入</button>
+          <button class="btn primary" v-else @click="register()">註冊</button>
+          <button class="btn" @click="fillDemo()">填入 demo/demo</button>
+        </div>
+
+        <div class="muted small" style="margin-top:10px;line-height:1.6">
+          Demo 說明：帳密存於 IndexedDB，密碼使用 SHA-256 + salt 雜湊（僅供練習，非正式上線安全方案）。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+<!-- 以 text/plain 放 seed code，避免 JS 字串轉義問題 -->
+<script type="text/plain" id="seed-p02">
+import java.util.Scanner;
+
+public class P02 {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        // 讀第一個矩陣大小
+        int r1 = sc.nextInt();
+        int c1 = sc.nextInt();
+
+        int[][] A = new int[r1][c1];
+        for (int i = 0; i < r1; i++) {
+            for (int j = 0; j < c1; j++) {
+                A[i][j] = sc.nextInt();
+            }
+        }
+
+        // 讀第二個矩陣大小
+        int r2 = sc.nextInt();
+        int c2 = sc.nextInt();
+
+        int[][] B = new int[r2][c2];
+        for (int i = 0; i < r2; i++) {
+            for (int j = 0; j < c2; j++) {
+                B[i][j] = sc.nextInt();
+            }
+        }
+
+        // 結果矩陣
+        int[][] C = new int[r1][c2];
+
+        // 矩陣相乘（三層迴圈）
+        for (int i = 0; i < r1; i++) {
+            for (int j = 0; j < c2; j++) {
+                for (int k = 0; k < c1; k++) {
+                    C[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+
+        // 輸出結果
+        for (int i = 0; i < r1; i++) {
+            for (int j = 0; j < c2; j++) {
+                System.out.print(C[i][j]);
+                if (j < c2 - 1) System.out.print(" ");
+            }
+            System.out.println();
+        }
+    }
+}
+</script>
+
+<script type="text/plain" id="seed-p03">
+import java.util.*;
+
+public class P03 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+        if (n == 0) {
+            System.out.println(0);
+            return;
+        }
+        if (n == 1 || n == 2) {
+            System.out.println(1);
+            return;
+        }
+
+        long[] a = new long[n + 1];
+        a[0] = 0;
+        a[1] = 1;
+        a[2] = 1;
+
+        for (int i = 3; i <= n; i++) {
+            a[i] = a[i - 3] + a[i - 2];
+        }
+
+        System.out.println(a[n]);
+    }
+}
+</script>
+
+<script type="text/plain" id="seed-p04">
+import java.util.*;
+
+public class P04 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            long n = sc.nextLong();
+
+            // 輸入負數就結束
+            if (n < 0) {
+                break;
+            }
+
+            long rev = 0;
+
+            // 特別處理 n = 0
+            if (n == 0) {
+                System.out.println(0);
+                continue;
+            }
+
+            while (n > 0) {
+                rev = rev * 10 + (n % 10);
+                n /= 10;
+            }
+
+            System.out.println(rev);
+        }
+    }
+}
+</script>
+
+<script type="text/plain" id="seed-p05">
+import java.util.*;
+
+public class P05 {
+
+    static class Student {
+        int id;
+        String name;
+        int mid;
+        int fin;
+        double avg;
+
+        Student(int id, String name, int mid, int fin) {
+            this.id = id;
+            this.name = name;
+            this.mid = mid;
+            this.fin = fin;
+            this.avg = (mid + fin) / 2.0;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        List<Student> list = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int id = sc.nextInt();
+            String name = sc.next();
+            int mid = sc.nextInt();
+            int fin = sc.nextInt();
+            list.add(new Student(id, name, mid, fin));
+        }
+
+        // 🔹 依學號排序
+        List<Student> byId = new ArrayList<>(list);
+        byId.sort(Comparator.comparingInt(s -> s.id));
+
+        for (Student s : byId) {
+            System.out.printf("%d-%s:%.1f%n", s.id, s.name, s.avg);
+        }
+
+        // 🔹 依總成績排序（由高到低）
+        List<Student> byScore = new ArrayList<>(byId);
+        byScore.sort((a, b) -> Double.compare(b.avg, a.avg));
+
+        for (Student s : byScore) {
+            System.out.printf("%d-%s:%.1f%n", s.id, s.name, s.avg);
+        }
+    }
+}
+</script>
+
+<script type="text/plain" id="seed-cashcard">
+import java.util.Scanner;
+
+public class Prog2 {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        CashCard card = new CashCard();
+
+        while (true) {
+            switch (scanner.nextInt()) {
+                case 1:
+                    card.topUp(100);
+                    break;
+                case 2:
+                    card.deduct(10);
+                    break;
+                case 3:
+                    card.deduct(50);
+                    break;
+                case 4:
+                    card.showBalance();
+                    break;
+                case 9:
+                    System.exit(0);
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+class CashCard {
+
+    private int balance;
+
+    public CashCard() {
+        balance = 0;
+    }
+
+    public void topUp(int amount) {
+        balance += amount;
+    }
+
+    public void deduct(int amount) {
+        if (balance < amount) {
+            System.out.println("ERROR");
+        } else {
+            balance -= amount;
+        }
+    }
+
+    public void showBalance() {
+        System.out.println(balance);
+    }
+}
+</script>
+
+<script>
+  Prism.plugins.autoloader.languages_path = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/";
+
+  const DB_NAME = "devslite_forum_db";
+  const DB_VER  = 1;
+
+  function openDB(){
+    return new Promise((resolve,reject)=>{
+      const req = indexedDB.open(DB_NAME, DB_VER);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+
+        const users = db.createObjectStore("users", { keyPath:"id", autoIncrement:true });
+        users.createIndex("username", "username", { unique:true });
+
+        const posts = db.createObjectStore("posts", { keyPath:"id", autoIncrement:true });
+        posts.createIndex("createdAt", "createdAt");
+        posts.createIndex("authorId", "authorId");
+
+        const comments = db.createObjectStore("comments", { keyPath:"id", autoIncrement:true });
+        comments.createIndex("postId", "postId");
+        comments.createIndex("createdAt", "createdAt");
+
+        const meta = db.createObjectStore("meta", { keyPath:"k" });
+      };
+      req.onsuccess = ()=>resolve(req.result);
+      req.onerror = ()=>reject(req.error);
+    });
+  }
+
+  function store(db, name, mode="readonly"){ return db.transaction(name, mode).objectStore(name); }
+  function reqToPromise(req){ return new Promise((res,rej)=>{ req.onsuccess=()=>res(req.result); req.onerror=()=>rej(req.error); }); }
+
+  async function sha256Hex(text){
+    const enc = new TextEncoder();
+    const buf = await crypto.subtle.digest("SHA-256", enc.encode(text));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  function randSalt(){
+    const a = crypto.getRandomValues(new Uint8Array(16));
+    return [...a].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  function fmt(ts){
+    try{
+      return new Intl.DateTimeFormat("zh-TW", { dateStyle:"medium", timeStyle:"short" }).format(new Date(ts));
+    }catch(e){
+      return new Date(ts).toLocaleString();
+    }
+  }
+  function getText(id){ return (document.getElementById(id)?.textContent || "").trim(); }
+
+  const { createApp, ref, reactive, computed, onMounted, nextTick, watch } = Vue;
+
+  createApp({
+    setup(){
+      const db = ref(null);
+
+      const route = ref("home"); // home | post | new
+      const q = ref("");
+      const filterMode = ref("all"); // all | original | series
+      const panel = ref("home");
+
+      const me = ref(null);
+      const menuOpen = ref(false);
+
+      const posts = ref([]);
+      const activePostId = ref(null);
+      const activePost = computed(()=>posts.value.find(p=>p.id===activePostId.value) || null);
+
+      const comments = ref([]);
+      const commentDraft = ref("");
+
+      const commentCount = reactive({});
+      const latestReplies = ref([]);
+
+      const activeUsers = ref([]);
+
+      const toast = ref("");
+      let toastTimer = null;
+      function notify(msg){
+        toast.value = msg;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(()=>toast.value="", 2400);
+      }
+
+      // Auth modal
+      const authOpen = ref(false);
+      const authTab = ref("login");
+      const auth = reactive({ username:"", password:"" });
+
+      // New post draft
+      const draft = reactive({
+        title:"",
+        tags:"",
+        language:"java",
+        body:"",
+        code:"",
+        imageUrl:"",
+        previewImages:[]
+      });
+
+      function toggleMenu(){ menuOpen.value = !menuOpen.value; }
+      function goHome(){ route.value="home"; activePostId.value=null; comments.value=[]; menuOpen.value=false; nextTick(()=>Prism.highlightAll()); }
+      function goNew(){ route.value="new"; menuOpen.value=false; }
+      async function openPost(id){
+        route.value="post";
+        activePostId.value=id;
+        await loadComments(id);
+        await nextTick();
+        Prism.highlightAll();
+      }
+
+      const filteredPosts = computed(()=>{
+        const kw = q.value.trim().toLowerCase();
+        let arr = posts.value.slice();
+
+        if(filterMode.value==="original") arr = arr.filter(p=>p.isOriginal);
+        if(filterMode.value==="series") arr = arr.filter(p=>p.isSeries);
+
+        if(!kw) return arr;
+        return arr.filter(p=>{
+          const hay = (p.title+" "+p.body+" "+(p.tags||[]).join(" ")+" "+p.authorName).toLowerCase();
+          return hay.includes(kw);
+        });
+      });
+
+      async function loadPosts(){
+        const s = store(db.value, "posts");
+        const idx = s.index("createdAt");
+        const req = idx.openCursor(null, "prev");
+        const out = [];
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur){ out.push(cur.value); cur.continue(); }
+            else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+        posts.value = out;
+        await refreshCommentCount();
+      }
+
+      async function refreshCommentCount(){
+        const map = {};
+        const s = store(db.value, "comments");
+        const req = s.openCursor();
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur){
+              const c = cur.value;
+              map[c.postId] = (map[c.postId] || 0) + 1;
+              cur.continue();
+            }else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+        Object.keys(commentCount).forEach(k=>delete commentCount[k]);
+        Object.entries(map).forEach(([k,v])=>commentCount[k]=v);
+        await loadLatestReplies();
+      }
+
+      async function loadComments(postId){
+        const s = store(db.value, "comments");
+        const idx = s.index("postId");
+        const req = idx.openCursor(IDBKeyRange.only(postId), "next");
+        const out = [];
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur){ out.push(cur.value); cur.continue(); }
+            else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+        comments.value = out;
+      }
+
+      async function loadLatestReplies(){
+        const s = store(db.value, "comments");
+        const idx = s.index("createdAt");
+        const req = idx.openCursor(null, "prev");
+        const out = [];
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur && out.length < 8){
+              const c = cur.value;
+              const p = posts.value.find(x=>x.id===c.postId);
+              out.push({
+                id: c.id,
+                postId: c.postId,
+                postTitle: p ? p.title : "(已刪除的貼文)",
+                authorName: c.authorName,
+                body: (c.body||"").slice(0, 26) + ((c.body||"").length>26 ? "…" : "")
+              });
+              cur.continue();
+            }else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+        latestReplies.value = out;
+      }
+
+      async function copyText(text){
+        try{
+          await navigator.clipboard.writeText(text);
+          notify("已複製到剪貼簿");
+        }catch(e){
+          notify("複製失敗（瀏覽器權限限制）");
+        }
+      }
+
+      async function addComment(){
+        if(!me.value){ openAuth(); notify("請先登入"); return; }
+        if(!activePost.value){ notify("找不到貼文"); return; }
+        const body = commentDraft.value.trim();
+        if(!body){ notify("留言不可空白"); return; }
+
+        const s = store(db.value, "comments", "readwrite");
+        await reqToPromise(s.add({
+          postId: activePost.value.id,
+          body,
+          authorId: me.value.id,
+          authorName: me.value.username,
+          createdAt: Date.now()
+        }));
+
+        commentDraft.value="";
+        await loadComments(activePost.value.id);
+        await refreshCommentCount();
+        notify("留言已送出");
+      }
+
+      async function deleteComment(id){
+        const c = comments.value.find(x=>x.id===id);
+        if(!c) return;
+        if(!me.value || me.value.id !== c.authorId){ notify("只能刪自己留言"); return; }
+        const s = store(db.value, "comments", "readwrite");
+        await reqToPromise(s.delete(id));
+        await loadComments(activePost.value.id);
+        await refreshCommentCount();
+        notify("留言已刪除");
+      }
+
+      async function deletePost(id){
+        const p = posts.value.find(x=>x.id===id);
+        if(!p) return;
+        if(!me.value || me.value.id !== p.authorId){ notify("只能刪自己貼文"); return; }
+
+        // delete comments
+        const cs = store(db.value, "comments", "readwrite");
+        const idx = cs.index("postId");
+        const req = idx.openCursor(IDBKeyRange.only(id));
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur){
+              cs.delete(cur.primaryKey);
+              cur.continue();
+            }else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+
+        const ps = store(db.value, "posts", "readwrite");
+        await reqToPromise(ps.delete(id));
+
+        await loadPosts();
+        goHome();
+        notify("貼文已刪除");
+      }
+
+      function openAuth(){
+        authOpen.value = true;
+        authTab.value = "login";
+        auth.username = "";
+        auth.password = "";
+        menuOpen.value=false;
+      }
+      function fillDemo(){
+        auth.username="demo";
+        auth.password="demo";
+        notify("已填入 demo/demo");
+      }
+      function logout(){
+        me.value=null;
+        localStorage.removeItem("devslite_session");
+        menuOpen.value=false;
+        notify("已登出");
+      }
+
+      async function getUserByUsername(username){
+        const s = store(db.value, "users");
+        return await reqToPromise(s.index("username").get(username));
+      }
+
+      async function register(){
+        const u = auth.username.trim();
+        const p = auth.password || "";
+        if(u.length < 2){ notify("帳號至少 2 字"); return; }
+        if(p.length < 4){ notify("密碼至少 4 碼（Demo）"); return; }
+
+        const exists = await getUserByUsername(u);
+        if(exists){ notify("帳號已存在"); return; }
+
+        const salt = randSalt();
+        const hash = await sha256Hex(salt + ":" + p);
+
+        const s = store(db.value, "users", "readwrite");
+        const id = await reqToPromise(s.add({ username:u, salt, passwordHash:hash, createdAt: Date.now() }));
+        me.value = { id, username:u };
+        localStorage.setItem("devslite_session", JSON.stringify(me.value));
+        authOpen.value=false;
+        notify("註冊成功（已登入）");
+      }
+
+      async function login(){
+        const u = auth.username.trim();
+        const p = auth.password || "";
+        const user = await getUserByUsername(u);
+        if(!user){ notify("帳號不存在"); return; }
+
+        const hash = await sha256Hex(user.salt + ":" + p);
+        if(hash !== user.passwordHash){ notify("密碼錯誤"); return; }
+
+        me.value = { id: user.id, username: user.username };
+        localStorage.setItem("devslite_session", JSON.stringify(me.value));
+        authOpen.value=false;
+        notify("登入成功");
+      }
+
+      async function restoreSession(){
+        try{
+          const raw = localStorage.getItem("devslite_session");
+          if(!raw) return;
+          const s = JSON.parse(raw);
+          const u = await reqToPromise(store(db.value,"users").get(s.id));
+          if(u) me.value = { id:u.id, username:u.username };
+          else localStorage.removeItem("devslite_session");
+        }catch(e){}
+      }
+
+      function resetDraft(){
+        draft.title="";
+        draft.tags="";
+        draft.language="java";
+        draft.body="";
+        draft.code="";
+        draft.imageUrl="";
+        draft.previewImages=[];
+        notify("已清空草稿");
+      }
+
+      async function onPickImage(ev){
+        const f = (ev.target.files||[])[0];
+        if(!f) return;
+        const dataUrl = await new Promise((res,rej)=>{
+          const r = new FileReader();
+          r.onload = ()=>res(r.result);
+          r.onerror = ()=>rej(r.error);
+          r.readAsDataURL(f);
+        });
+        draft.previewImages = [dataUrl];
+        ev.target.value="";
+      }
+
+      async function publish(){
+        if(!me.value){ openAuth(); notify("請先登入"); return; }
+        if(!draft.title.trim() || !draft.body.trim()){
+          notify("請至少填標題與內文");
+          return;
+        }
+
+        const tags = draft.tags.split(",").map(s=>s.trim()).filter(Boolean);
+        const imgs = [];
+
+        if(draft.imageUrl.trim()) imgs.push(draft.imageUrl.trim());
+        if(draft.previewImages.length) imgs.push(...draft.previewImages);
+
+        const p = {
+          title: draft.title.trim(),
+          body: draft.body.trim(),
+          tags,
+          images: imgs,
+          code: draft.code || "",
+          language: draft.code ? (draft.language || "text") : "",
+          authorId: me.value.id,
+          authorName: me.value.username,
+          createdAt: Date.now(),
+          isOriginal: true,
+          isSeries: false
+        };
+
+        const ps = store(db.value, "posts", "readwrite");
+        const id = await reqToPromise(ps.add(p));
+        await loadPosts();
+        resetDraft();
+        notify("已發表");
+        await openPost(id);
+      }
+
+      async function wipeAll(){
+        if(!confirm("確定清空 IndexedDB 全部資料？")) return;
+        await reqToPromise(store(db.value,"posts","readwrite").clear());
+        await reqToPromise(store(db.value,"comments","readwrite").clear());
+        await reqToPromise(store(db.value,"users","readwrite").clear());
+        await reqToPromise(store(db.value,"meta","readwrite").clear());
+        logout();
+        posts.value=[];
+        comments.value=[];
+        latestReplies.value=[];
+        Object.keys(commentCount).forEach(k=>delete commentCount[k]);
+        activeUsers.value=[];
+        notify("已清空資料庫");
+      }
+
+      async function seedDemo(){
+        // clear
+        await reqToPromise(store(db.value,"posts","readwrite").clear());
+        await reqToPromise(store(db.value,"comments","readwrite").clear());
+        await reqToPromise(store(db.value,"users","readwrite").clear());
+        await reqToPromise(store(db.value,"meta","readwrite").clear());
+
+        // users
+        const us = store(db.value,"users","readwrite");
+        const demoSalt = "demo_salt";
+        const demoHash = await sha256Hex(demoSalt + ":" + "demo");
+
+        const userNames = ["尤川豪", "Enox", "chenjenping", "Kevin Hou", "JuenTingShie", "demo"];
+        const userIds = {};
+        for(const name of userNames){
+          const salt = (name==="demo") ? demoSalt : randSalt();
+          const passwordHash = (name==="demo") ? demoHash : await sha256Hex(salt + ":" + "1234");
+          const id = await reqToPromise(us.add({ username:name, salt, passwordHash, createdAt: Date.now()-Math.floor(Math.random()*86400000) }));
+          userIds[name]=id;
+        }
+
+        // posts
+        const ps = store(db.value,"posts","readwrite");
+        const now = Date.now();
+
+        const pCash = await reqToPromise(ps.add({
+          title:"現金卡加值問題（CashCard）— switch + 物件封裝",
+          body:
+`題目：輸入 1/2/3/4/9 代表加值、扣款、查詢、退出。扣款不足要印 ERROR。
+重點：CashCard 類別封裝 balance，deduct 時做餘額檢查。`,
+          tags:["Java","OOP","switch"],
+          images:["1.jpg"],
+          code:getText("seed-cashcard"),
+          language:"java",
+          authorId:userIds["尤川豪"],
+          authorName:"尤川豪",
+          createdAt: now - 1000*60*60*20,
+          isOriginal:false,
+          isSeries:true
+        }));
+
+        const pMat = await reqToPromise(ps.add({
+          title:"矩陣相乘（App04）— 三層迴圈內積實作",
+          body:
+`題目：讀入兩個矩陣 (r1,c1) 與 (r2,c2)，輸出相乘結果 (r1,c2)。
+關鍵：三層迴圈 i/j/k，C[i][j] += A[i][k] * B[k][j]。`,
+          tags:["Java","Matrix","Loop"],
+          images:["2.jpg","2-2.jpg","2-3.jpg"],
+          code:getText("seed-p02"),
+          language:"java",
+          authorId:userIds["chenjenping"],
+          authorName:"chenjenping",
+          createdAt: now - 1000*60*60*30,
+          isOriginal:true,
+          isSeries:false
+        }));
+
+        const pSeq = await reqToPromise(ps.add({
+          title:"數字推算 — a[n] = a[n-3] + a[n-2]（索引輸入輸出）",
+          body:
+`題目：前幾項固定（0,1,1），從第 n 項開始由前面 n-3 與 n-2 相加。
+作法：用 long[] 自底向上迴圈填表，直接輸出 a[n]。`,
+          tags:["Java","DP","Array"],
+          images:["3.jpg"],
+          code:getText("seed-p03"),
+          language:"java",
+          authorId:userIds["Enox"],
+          authorName:"Enox",
+          createdAt: now - 1000*60*60*12,
+          isOriginal:true,
+          isSeries:false
+        }));
+
+        const pRev = await reqToPromise(ps.add({
+          title:"反轉數字（連續輸入，遇負數結束）",
+          body:
+`題目：持續讀入整數；若輸入負數就停止；對每個非負數輸出反轉後的整數。
+注意：n=0 要特別輸出 0。`,
+          tags:["Java","While","Math"],
+          images:["4.jpg"],
+          code:getText("seed-p04"),
+          language:"java",
+          authorId:userIds["Kevin Hou"],
+          authorName:"Kevin Hou",
+          createdAt: now - 1000*60*60*9,
+          isOriginal:false,
+          isSeries:true
+        }));
+
+        const pScore = await reqToPromise(ps.add({
+          title:"成績計算與排序問題 — 先依學號，再依總成績",
+          body:
+`題目：輸入 n 筆學生（學號、姓名、期中、期末），計算平均作為總成績。
+輸出 1：依學號小到大；輸出 2：依總成績高到低（小數點 1 位）。`,
+          tags:["Java","Sort","Comparator"],
+          images:["5.jpg","5-1.jpg"],
+          code:getText("seed-p05"),
+          language:"java",
+          authorId:userIds["JuenTingShie"],
+          authorName:"JuenTingShie",
+          createdAt: now - 1000*60*60*5,
+          isOriginal:true,
+          isSeries:false
+        }));
+
+        // seed comments
+        const cs = store(db.value,"comments","readwrite");
+        await reqToPromise(cs.add({
+          postId: pMat,
+          body:"矩陣相乘如果輸入尺寸不合法要怎麼處理？要不要先檢查 c1 == r2？",
+          authorId:userIds["demo"],
+          authorName:"demo",
+          createdAt: now - 1000*60*60*4
+        }));
+        await reqToPromise(cs.add({
+          postId: pCash,
+          body:"扣款不足印 ERROR 但不扣錢，這點最常漏掉。",
+          authorId:userIds["demo"],
+          authorName:"demo",
+          createdAt: now - 1000*60*60*3
+        }));
+        await reqToPromise(cs.add({
+          postId: pScore,
+          body:"排序時要注意第二次排序要用總成績 desc，輸出格式要對齊小數 1 位。",
+          authorId:userIds["Enox"],
+          authorName:"Enox",
+          createdAt: now - 1000*60*30
+        }));
+
+        // meta flag
+        await reqToPromise(store(db.value,"meta","readwrite").put({ k:"seeded", v:true }));
+
+        // load
+        await loadPosts();
+        await refreshCommentCount();
+        activeUsers.value = await loadActiveUsers();
+        notify("預設文章已建立（可用 demo/demo 登入）");
+      }
+
+      async function loadActiveUsers(){
+        // 簡化：直接讀 users，取前幾個顯示
+        const s = store(db.value,"users");
+        const req = s.openCursor();
+        const out = [];
+        await new Promise((resolve,reject)=>{
+          req.onsuccess = (e)=>{
+            const cur = e.target.result;
+            if(cur){ out.push(cur.value); cur.continue(); }
+            else resolve();
+          };
+          req.onerror = ()=>reject(req.error);
+        });
+        // 依 createdAt 近到遠（模擬活躍）
+        out.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        return out.slice(0, 8).map(u=>({ id:u.id, username:u.username }));
+      }
+
+      async function ensureSeed(){
+        const m = store(db.value,"meta");
+        const seeded = await reqToPromise(m.get("seeded"));
+        const cnt = await reqToPromise(store(db.value,"posts").count());
+        if(!seeded || cnt===0){
+          await seedDemo();
+        }else{
+          await loadPosts();
+          await refreshCommentCount();
+          activeUsers.value = await loadActiveUsers();
+        }
+      }
+
+      watch(route, async ()=>{
+        await nextTick();
+        Prism.highlightAll();
+      });
+
+      onMounted(async ()=>{
+        db.value = await openDB();
+        await ensureSeed();
+        await restoreSession();
+
+        window.addEventListener("keydown",(ev)=>{
+          if((ev.ctrlKey||ev.metaKey) && ev.key.toLowerCase()==="k"){
+            ev.preventDefault();
+            if(me.value) goNew();
+            else openAuth();
+          }
+        });
+      });
+
+      return {
+        route, q, filterMode, panel,
+        me, menuOpen,
+        posts, filteredPosts, activePostId, activePost,
+        comments, commentDraft,
+        commentCount, latestReplies,
+        activeUsers,
+        toast,
+        authOpen, authTab, auth,
+        draft,
+
+        fmt,
+        toggleMenu, goHome, goNew, openPost,
+        openAuth, fillDemo, register, login, logout,
+        copyText,
+        addComment, deleteComment,
+        publish, resetDraft, onPickImage,
+        deletePost,
+        seedDemo, wipeAll
+      };
+    }
+  }).mount("#app");
+</script>
+</body>
+</html>
